@@ -141,7 +141,7 @@
     </nav>
     <div class="foot">
       Fuente: dump <code>mongodump</code><br>
-      Colecciones: <strong>5</strong> · Docs: <strong>16</strong><br>
+      Colecciones: <strong>5</strong> · Docs: <strong id="docsTotal">—</strong><br>
       MongoDB <code>8.2.1</code>
     </div>
   </aside>
@@ -166,13 +166,13 @@
           </table></div>
         </div>
         <div class="card">
-          <div class="card-h"><h3>Actividad reciente</h3><span class="hint">últimos eventos</span></div>
+          <div class="card-h"><h3>Actividad reciente</h3><span class="hint">últimos 12 eventos</span></div>
           <div style="padding:6px 20px 14px"><ul class="timeline" id="tl"></ul></div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-h"><h3>Distribución de stock por producto</h3><span class="hint">unidades disponibles</span></div>
+        <div class="card-h"><h3>Distribución de stock por producto</h3><span class="hint" id="stockHint">unidades disponibles</span></div>
         <div style="padding:16px 20px" id="stockBars"></div>
       </div>
     </section>
@@ -180,7 +180,7 @@
     <!-- ---------- PRODUCTOS ---------- -->
     <section class="section" id="productos">
       <div class="page-head">
-        <div><h2>Productos</h2><p>Colección <strong>productos</strong> · precios enteros (ARS)</p></div>
+        <div><h2>Productos</h2><p>Colección <strong>productos</strong> · precios enteros (ARS) · <span id="cntProd">—</span></p></div>
         <div style="display:flex;gap:10px">
           <select class="filter" id="fCatProd"><option value="">Todas las categorías</option></select>
           <div class="search"><input id="qProd" placeholder="Buscar producto…"></div>
@@ -195,7 +195,7 @@
     <!-- ---------- CATEGORIAS ---------- -->
     <section class="section" id="categorias">
       <div class="page-head">
-        <div><h2>Categorías</h2><p>Colección <strong>categorias</strong> · soporta jerarquía vía <code>parentId</code></p></div>
+        <div><h2>Categorías</h2><p>Colección <strong>categorias</strong> · jerarquía vía <code>parentId</code> · <span id="cntCat">—</span></p></div>
       </div>
       <div class="cat-grid" id="catGrid"></div>
     </section>
@@ -203,7 +203,7 @@
     <!-- ---------- CLIENTES ---------- -->
     <section class="section" id="clientes">
       <div class="page-head">
-        <div><h2>Clientes</h2><p>Colección <strong>clientes</strong> · email único (índice unique)</p></div>
+        <div><h2>Clientes</h2><p>Colección <strong>clientes</strong> · email único (índice unique) · <span id="cntCli">—</span></p></div>
         <div class="search"><input id="qCli" placeholder="Buscar cliente o email…"></div>
       </div>
       <div class="card"><div class="table-scroll"><table>
@@ -215,7 +215,7 @@
     <!-- ---------- PEDIDOS ---------- -->
     <section class="section" id="pedidos">
       <div class="page-head">
-        <div><h2>Pedidos</h2><p>Colección <strong>pedidos</strong> · ítems anidados con precio unitario</p></div>
+        <div><h2>Pedidos</h2><p>Colección <strong>pedidos</strong> · ítems anidados con precio unitario · <span id="cntPed">—</span></p></div>
         <div style="display:flex;gap:10px">
           <select class="filter" id="fEstPed">
             <option value="">Todos los estados</option>
@@ -230,7 +230,7 @@
     <!-- ---------- PAGOS ---------- -->
     <section class="section" id="pagos">
       <div class="page-head">
-        <div><h2>Pagos</h2><p>Colección <strong>pagos</strong> · relacionada a pedidos via <code>pedido_id</code></p></div>
+        <div><h2>Pagos</h2><p>Colección <strong>pagos</strong> · relacionada a pedidos via <code>pedido_id</code> · <span id="cntPag">—</span></p></div>
         <select class="filter" id="fEstPag">
           <option value="">Todos los estados</option>
           <option>pendiente</option><option>aprobado</option><option>rechazado</option><option>reembolsado</option>
@@ -258,36 +258,2570 @@
    DATOS  (extraídos de los archivos .bson del dump)
    ========================================================= */
 const DB = {
-  categorias: [
-    {_id:"68f8f4eeb6fbbdfa6ccebea4", nombre:"Electrónica"},
-    {_id:"68f8f4eeb6fbbdfa6ccebea5", nombre:"Indumentaria"},
-    {_id:"68f8f51cb6fbbdfa6ccebea6", nombre:"Electrónica"},
-    {_id:"68f8f51cb6fbbdfa6ccebea7", nombre:"Indumentaria"}
+  "categorias": [
+    {
+      "_id": "68f8f4eeb6fbbdfa6ccebea4",
+      "nombre": "Electrónica"
+    },
+    {
+      "_id": "68f8f4eeb6fbbdfa6ccebea5",
+      "nombre": "Indumentaria"
+    },
+    {
+      "_id": "68f8f51cb6fbbdfa6ccebea6",
+      "nombre": "Electrónica"
+    },
+    {
+      "_id": "68f8f51cb6fbbdfa6ccebea7",
+      "nombre": "Indumentaria"
+    },
+    {
+      "_id": "a043bae1603803a839c0cb52",
+      "nombre": "Hogar y Cocina"
+    },
+    {
+      "_id": "f511d9cb8f68d9d9b0341314",
+      "nombre": "Deportes"
+    },
+    {
+      "_id": "a5534ea92b26fa8adc30543f",
+      "nombre": "Libros y Papelería"
+    },
+    {
+      "_id": "e5a6e743849e63f8101ac616",
+      "nombre": "Belleza y Cuidado"
+    },
+    {
+      "_id": "f8fd0ba84a167fe482ed4a92",
+      "nombre": "Juguetes"
+    },
+    {
+      "_id": "c8c8050eed40ef171cc2784d",
+      "nombre": "Mascotas"
+    },
+    {
+      "_id": "638b34fa781359331a3ed13a",
+      "nombre": "Herramientas"
+    },
+    {
+      "_id": "32e97cc31667baf165d33764",
+      "nombre": "Alimentos y Bebidas"
+    }
   ],
-  clientes: [
-    {_id:"68f8f584b6fbbdfa6ccebeae", nombre:"Franco Parra", email:"franco@example.com", creadoEn:"2025-10-22T15:17:24.194Z"},
-    {_id:"68f8f584b6fbbdfa6ccebeaf", nombre:"Sofía López",  email:"sofia@example.com",  creadoEn:"2025-10-22T15:17:24.202Z"}
+  "clientes": [
+    {
+      "_id": "68f8f584b6fbbdfa6ccebeae",
+      "nombre": "Franco Parra",
+      "email": "franco@example.com",
+      "creadoEn": "2025-10-22T15:17:24.194Z"
+    },
+    {
+      "_id": "68f8f584b6fbbdfa6ccebeaf",
+      "nombre": "Sofía López",
+      "email": "sofia@example.com",
+      "creadoEn": "2025-10-22T15:17:24.202Z"
+    },
+    {
+      "_id": "96ac0a68b20da723a5f02757",
+      "nombre": "Mateo González",
+      "email": "mateo.gonzález@outlook.com",
+      "telefono": "+54 9 11 4314-3255",
+      "direcciones": [
+        {
+          "calle": "Calle Mendoza 3360",
+          "ciudad": "Rosario",
+          "provincia": "Santa Fe",
+          "codigoPostal": "6150"
+        }
+      ],
+      "creadoEn": "2025-08-11T11:07:00.000Z"
+    },
+    {
+      "_id": "b768447f4e71d7e71ad5518e",
+      "nombre": "Valentina Ruiz",
+      "email": "valentina.ruiz@gmail.com",
+      "telefono": "+54 9 11 4645-3852",
+      "direcciones": [
+        {
+          "calle": "Calle Mendoza 4267",
+          "ciudad": "Mendoza",
+          "provincia": "Mendoza",
+          "codigoPostal": "4673"
+        }
+      ],
+      "creadoEn": "2025-07-02T11:50:00.000Z"
+    },
+    {
+      "_id": "37597f2e16b7669251782d89",
+      "nombre": "Santiago Martínez",
+      "email": "santiago.martínez@hotmail.com",
+      "telefono": "+54 9 11 4528-8088",
+      "direcciones": [
+        {
+          "calle": "Av. San Martín 1117",
+          "ciudad": "La Plata",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "9488"
+        }
+      ],
+      "creadoEn": "2025-07-10T12:10:00.000Z"
+    },
+    {
+      "_id": "5b5fed4a824882f2ab9d9d00",
+      "nombre": "Camila Fernández",
+      "email": "camila.fernández@hotmail.com",
+      "telefono": "+54 9 11 6627-5336",
+      "direcciones": [
+        {
+          "calle": "Calle Belgrano 4786",
+          "ciudad": "Mar del Plata",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "7825"
+        }
+      ],
+      "creadoEn": "2025-06-08T15:56:00.000Z"
+    },
+    {
+      "_id": "a43c67b26752d5f56c813172",
+      "nombre": "Joaquín Benítez",
+      "email": "joaquín.benítez@outlook.com",
+      "telefono": "+54 9 11 4207-5754",
+      "direcciones": [
+        {
+          "calle": "Av. 9 de Julio 5141",
+          "ciudad": "Tucumán",
+          "provincia": "Tucumán",
+          "codigoPostal": "7850"
+        }
+      ],
+      "creadoEn": "2025-08-03T21:57:00.000Z"
+    },
+    {
+      "_id": "deb32f7e716739049da40124",
+      "nombre": "Martina Sosa",
+      "email": "martina.sosa@hotmail.com",
+      "telefono": "+54 9 11 5498-7606",
+      "direcciones": [
+        {
+          "calle": "Calle Mendoza 470",
+          "ciudad": "Salta",
+          "provincia": "Salta",
+          "codigoPostal": "7563"
+        }
+      ],
+      "creadoEn": "2025-06-14T17:35:00.000Z"
+    },
+    {
+      "_id": "54678d99215f8529600bc82e",
+      "nombre": "Nicolás Aguirre",
+      "email": "nicolás.aguirre@hotmail.com",
+      "telefono": "+54 9 11 4572-6373",
+      "direcciones": [
+        {
+          "calle": "Calle Mendoza 1431",
+          "ciudad": "Bahía Blanca",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "7438"
+        }
+      ],
+      "creadoEn": "2025-08-16T17:21:00.000Z"
+    },
+    {
+      "_id": "b4d5af9cbb07fcc9b92a9d2a",
+      "nombre": "Emilia Cardoso",
+      "email": "emilia.cardoso@example.com",
+      "telefono": "+54 9 11 4129-2800",
+      "direcciones": [
+        {
+          "calle": "Calle Belgrano 255",
+          "ciudad": "Santa Fe",
+          "provincia": "Santa Fe",
+          "codigoPostal": "8225"
+        }
+      ],
+      "creadoEn": "2025-08-20T14:09:00.000Z"
+    },
+    {
+      "_id": "b6cedb0235a852e55cbab933",
+      "nombre": "Bruno Lombardi",
+      "email": "bruno.lombardi@example.com",
+      "telefono": "+54 9 11 6285-5890",
+      "direcciones": [
+        {
+          "calle": "Calle Belgrano 2538",
+          "ciudad": "Buenos Aires",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "5735"
+        }
+      ],
+      "creadoEn": "2025-07-24T19:45:00.000Z"
+    },
+    {
+      "_id": "55ec41a6fdfc44b574738eb2",
+      "nombre": "Catalina Vega",
+      "email": "catalina.vega@example.com",
+      "telefono": "+54 9 11 6521-4920",
+      "direcciones": [
+        {
+          "calle": "Calle Belgrano 515",
+          "ciudad": "Neuquén",
+          "provincia": "Neuquén",
+          "codigoPostal": "9700"
+        }
+      ],
+      "creadoEn": "2025-07-28T18:14:00.000Z"
+    },
+    {
+      "_id": "157a2ff2ae7ac440ca3bd0e6",
+      "nombre": "Andrés Peralta",
+      "email": "andrés.peralta@gmail.com",
+      "telefono": "+54 9 11 4720-1595",
+      "direcciones": [
+        {
+          "calle": "Av. 9 de Julio 4158",
+          "ciudad": "Córdoba",
+          "provincia": "Córdoba",
+          "codigoPostal": "4052"
+        }
+      ],
+      "creadoEn": "2025-08-14T08:00:00.000Z"
+    },
+    {
+      "_id": "91f4f87fd7312742bc9c2ded",
+      "nombre": "Lucía Márquez",
+      "email": "lucía.márquez@outlook.com",
+      "telefono": "+54 9 11 6110-6372",
+      "direcciones": [
+        {
+          "calle": "Calle Rivadavia 3383",
+          "ciudad": "Rosario",
+          "provincia": "Santa Fe",
+          "codigoPostal": "2562"
+        }
+      ],
+      "creadoEn": "2025-07-18T10:30:00.000Z"
+    },
+    {
+      "_id": "e0674599453a72aeecbaf53f",
+      "nombre": "Facundo Ríos",
+      "email": "facundo.ríos@outlook.com",
+      "telefono": "+54 9 11 5958-3509",
+      "direcciones": [
+        {
+          "calle": "Calle Entre Ríos 5062",
+          "ciudad": "Mendoza",
+          "provincia": "Mendoza",
+          "codigoPostal": "7121"
+        }
+      ],
+      "creadoEn": "2025-09-15T19:35:00.000Z"
+    },
+    {
+      "_id": "ccdca9c885e1de382d7ab7e7",
+      "nombre": "Julia Cabrera",
+      "email": "julia.cabrera@example.com",
+      "telefono": "+54 9 11 4227-8429",
+      "direcciones": [
+        {
+          "calle": "Av. Libertador 4304",
+          "ciudad": "La Plata",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "7806"
+        }
+      ],
+      "creadoEn": "2025-09-25T17:03:00.000Z"
+    },
+    {
+      "_id": "a4040316b80ef7422abf5e7e",
+      "nombre": "Ignacio Torres",
+      "email": "ignacio.torres@example.com",
+      "telefono": "+54 9 11 5546-7154",
+      "direcciones": [
+        {
+          "calle": "Calle Rivadavia 5692",
+          "ciudad": "San Juan",
+          "provincia": "San Juan",
+          "codigoPostal": "9835"
+        }
+      ],
+      "creadoEn": "2025-07-05T18:55:00.000Z"
+    },
+    {
+      "_id": "1f62fdcf7b663723ec0a9ee3",
+      "nombre": "Paulina Medina",
+      "email": "paulina.medina@outlook.com",
+      "telefono": "+54 9 11 4275-2653",
+      "direcciones": [
+        {
+          "calle": "Av. San Martín 3757",
+          "ciudad": "Corrientes",
+          "provincia": "Corrientes",
+          "codigoPostal": "1797"
+        }
+      ],
+      "creadoEn": "2025-08-02T19:02:00.000Z"
+    },
+    {
+      "_id": "78cc2f3e99cd3ef86489b2a8",
+      "nombre": "Ramiro Salas",
+      "email": "ramiro.salas@example.com",
+      "telefono": "+54 9 11 4192-6642",
+      "direcciones": [
+        {
+          "calle": "Av. 9 de Julio 4396",
+          "ciudad": "Buenos Aires",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "6222"
+        }
+      ],
+      "creadoEn": "2025-09-15T14:09:00.000Z"
+    },
+    {
+      "_id": "6c7d4bce8f8233aed1b34a9d",
+      "nombre": "Dolores Ferreyra",
+      "email": "dolores.ferreyra@outlook.com",
+      "telefono": "+54 9 11 4770-4555",
+      "direcciones": [
+        {
+          "calle": "Calle Entre Ríos 1811",
+          "ciudad": "Santa Fe",
+          "provincia": "Santa Fe",
+          "codigoPostal": "6455"
+        }
+      ],
+      "creadoEn": "2025-08-17T08:13:00.000Z"
+    },
+    {
+      "_id": "f1f7393e8c6854871f7de569",
+      "nombre": "Gonzalo Bustos",
+      "email": "gonzalo.bustos@hotmail.com",
+      "telefono": "+54 9 11 4906-3390",
+      "direcciones": [
+        {
+          "calle": "Av. San Martín 2236",
+          "ciudad": "Córdoba",
+          "provincia": "Córdoba",
+          "codigoPostal": "7841"
+        }
+      ],
+      "creadoEn": "2025-08-15T10:12:00.000Z"
+    },
+    {
+      "_id": "3938f5c7bb7b5282eff8d1d0",
+      "nombre": "Renata Quiroga",
+      "email": "renata.quiroga@outlook.com",
+      "telefono": "+54 9 11 4026-7756",
+      "direcciones": [
+        {
+          "calle": "Av. Libertador 5266",
+          "ciudad": "Mar del Plata",
+          "provincia": "Buenos Aires",
+          "codigoPostal": "4791"
+        }
+      ],
+      "creadoEn": "2025-06-18T19:09:00.000Z"
+    },
+    {
+      "_id": "370aeea0860b848b6f2e8394",
+      "nombre": "Matías Ledesma",
+      "email": "matías.ledesma@gmail.com",
+      "telefono": "+54 9 11 5451-5379",
+      "direcciones": [
+        {
+          "calle": "Av. 9 de Julio 747",
+          "ciudad": "Rosario",
+          "provincia": "Santa Fe",
+          "codigoPostal": "7112"
+        }
+      ],
+      "creadoEn": "2025-09-12T15:36:00.000Z"
+    },
+    {
+      "_id": "f3adadc16800276c9d1803de",
+      "nombre": "Antonella Vera",
+      "email": "antonella.vera@hotmail.com",
+      "telefono": "+54 9 11 5947-5441",
+      "direcciones": [
+        {
+          "calle": "Av. San Martín 709",
+          "ciudad": "Tucumán",
+          "provincia": "Tucumán",
+          "codigoPostal": "5593"
+        }
+      ],
+      "creadoEn": "2025-06-09T10:59:00.000Z"
+    }
   ],
-  productos: [
-    {_id:"68f8f52bb6fbbdfa6ccebea8", nombre:"Auriculares BT",  categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:19999,  stock:50,  creadoEn:"2025-10-22T15:15:55.549Z"},
-    {_id:"68f8f52bb6fbbdfa6ccebea9", nombre:'TV 55" 4K',      categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:499999, stock:10,  creadoEn:"2025-10-22T15:15:55.559Z"},
-    {_id:"68f8f52bb6fbbdfa6ccebeaa", nombre:"Zapatillas Runner",categoria_id:"68f8f51cb6fbbdfa6ccebea7", precio:89999, stock:120, creadoEn:"2025-10-22T15:15:55.563Z"},
-    {_id:"68f8f53fb6fbbdfa6ccebeab", nombre:"Auriculares BT",  categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:19999,  stock:50,  creadoEn:"2025-10-22T15:16:15.245Z"},
-    {_id:"68f8f53fb6fbbdfa6ccebeac", nombre:'TV 55" 4K',      categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:499999, stock:10,  creadoEn:"2025-10-22T15:16:15.248Z"},
-    {_id:"68f8f53fb6fbbdfa6ccebead", nombre:"Zapatillas Runner",categoria_id:"68f8f51cb6fbbdfa6ccebea7", precio:89999, stock:120, creadoEn:"2025-10-22T15:16:15.251Z"}
+  "productos": [
+    {
+      "_id": "68f8f52bb6fbbdfa6ccebea8",
+      "nombre": "Auriculares BT",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 19999,
+      "stock": 50,
+      "creadoEn": "2025-10-22T15:15:55.549Z"
+    },
+    {
+      "_id": "68f8f52bb6fbbdfa6ccebea9",
+      "nombre": "TV 55\" 4K",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 499999,
+      "stock": 10,
+      "creadoEn": "2025-10-22T15:15:55.559Z"
+    },
+    {
+      "_id": "68f8f52bb6fbbdfa6ccebeaa",
+      "nombre": "Zapatillas Runner",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 89999,
+      "stock": 120,
+      "creadoEn": "2025-10-22T15:15:55.563Z"
+    },
+    {
+      "_id": "68f8f53fb6fbbdfa6ccebeab",
+      "nombre": "Auriculares BT",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 19999,
+      "stock": 50,
+      "creadoEn": "2025-10-22T15:16:15.245Z"
+    },
+    {
+      "_id": "68f8f53fb6fbbdfa6ccebeac",
+      "nombre": "TV 55\" 4K",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 499999,
+      "stock": 10,
+      "creadoEn": "2025-10-22T15:16:15.248Z"
+    },
+    {
+      "_id": "68f8f53fb6fbbdfa6ccebead",
+      "nombre": "Zapatillas Runner",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 89999,
+      "stock": 120,
+      "creadoEn": "2025-10-22T15:16:15.251Z"
+    },
+    {
+      "_id": "3e7d80fdfed273606f4c76ff",
+      "nombre": "Notebook 15\" Ryzen 7",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 899999,
+      "stock": 18,
+      "creadoEn": "2025-09-10T16:09:00.000Z"
+    },
+    {
+      "_id": "330b0507e808d11d6f9901a9",
+      "nombre": "Smartwatch Active X2",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 129999,
+      "stock": 35,
+      "creadoEn": "2025-08-10T13:13:00.000Z"
+    },
+    {
+      "_id": "a542a7ee09918825134784fc",
+      "nombre": "Parlante BT 360°",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 54999,
+      "stock": 60,
+      "creadoEn": "2025-09-06T09:42:00.000Z"
+    },
+    {
+      "_id": "d4af211849b3a47ed1640ca4",
+      "nombre": "Tablet 10\" 128GB",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 349999,
+      "stock": 12,
+      "creadoEn": "2025-08-26T17:45:00.000Z"
+    },
+    {
+      "_id": "601ee8d9224ecde331ce692e",
+      "nombre": "Mouse Gamer RGB",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 34999,
+      "stock": 80,
+      "creadoEn": "2025-07-21T11:56:00.000Z"
+    },
+    {
+      "_id": "62ec6ab32b6073e5dd3a641c",
+      "nombre": "Teclado Mecánico RGB",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 89999,
+      "stock": 45,
+      "creadoEn": "2025-08-14T17:25:00.000Z"
+    },
+    {
+      "_id": "ad50e49f095c6f1e3068cafb",
+      "nombre": "Webcam Full HD",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 44999,
+      "stock": 6,
+      "creadoEn": "2025-07-26T14:27:00.000Z"
+    },
+    {
+      "_id": "1a55db4466426fae9480469a",
+      "nombre": "Powerbank 20000mAh",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea6",
+      "precio": 29999,
+      "stock": 90,
+      "creadoEn": "2025-08-29T16:28:00.000Z"
+    },
+    {
+      "_id": "a8cfba4a91f34c20f9c7e9b6",
+      "nombre": "Remera Algodón Oversize",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 18999,
+      "stock": 150,
+      "creadoEn": "2025-08-21T12:09:00.000Z"
+    },
+    {
+      "_id": "a0cc162f803d7caf9fe9b8d8",
+      "nombre": "Jeans Clásico Recto",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 44999,
+      "stock": 70,
+      "creadoEn": "2025-07-21T16:28:00.000Z"
+    },
+    {
+      "_id": "43ac8a41445823bb168636e9",
+      "nombre": "Campera Jeans",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 79999,
+      "stock": 25,
+      "creadoEn": "2025-09-28T09:54:00.000Z"
+    },
+    {
+      "_id": "e97f46ed8bce7476acbdef8e",
+      "nombre": "Gorra Trucker Ajustable",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 14999,
+      "stock": 110,
+      "creadoEn": "2025-09-14T18:42:00.000Z"
+    },
+    {
+      "_id": "0a270635c6cd4108f5acacf3",
+      "nombre": "Buzo Fleece Full Zip",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 39999,
+      "stock": 8,
+      "creadoEn": "2025-07-03T18:09:00.000Z"
+    },
+    {
+      "_id": "371f7459fbc249e9e6f39d3b",
+      "nombre": "Pollera Midi Lino",
+      "categoria_id": "68f8f51cb6fbbdfa6ccebea7",
+      "precio": 27999,
+      "stock": 55,
+      "creadoEn": "2025-08-08T18:51:00.000Z"
+    },
+    {
+      "_id": "1fc56585dd1fadb6bf4c876b",
+      "nombre": "Juego de Ollas 7 pzas",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 64999,
+      "stock": 30,
+      "creadoEn": "2025-08-04T14:54:00.000Z"
+    },
+    {
+      "_id": "3e47c9a57575449e88336837",
+      "nombre": "Licuadora 1.5L Vaso Vidrio",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 89999,
+      "stock": 22,
+      "creadoEn": "2025-09-01T16:50:00.000Z"
+    },
+    {
+      "_id": "0463a585f85743b5bfb3b49c",
+      "nombre": "Juego Sábano Queen",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 32999,
+      "stock": 48,
+      "creadoEn": "2025-09-15T13:06:00.000Z"
+    },
+    {
+      "_id": "d454b2004fac10475f4d1179",
+      "nombre": "Lámpara LED Escritorio",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 24999,
+      "stock": 3,
+      "creadoEn": "2025-09-26T09:09:00.000Z"
+    },
+    {
+      "_id": "294f1c9c3877df499bf33a22",
+      "nombre": "Set Vajilla 12 pzas",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 54999,
+      "stock": 26,
+      "creadoEn": "2025-07-10T11:00:00.000Z"
+    },
+    {
+      "_id": "6b7044d134c9c3132420c9de",
+      "nombre": "Air Fryer 4L",
+      "categoria_id": "a043bae1603803a839c0cb52",
+      "precio": 119999,
+      "stock": 15,
+      "creadoEn": "2025-08-26T10:29:00.000Z"
+    },
+    {
+      "_id": "bbf87106541fd9ffa40c7ae2",
+      "nombre": "Camiseta de Fútbol Selecta",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 29999,
+      "stock": 95,
+      "creadoEn": "2025-09-13T15:40:00.000Z"
+    },
+    {
+      "_id": "df7651267a6c0141cdd0d708",
+      "nombre": "Set Mancuernas 2×10kg",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 49999,
+      "stock": 20,
+      "creadoEn": "2025-09-18T16:40:00.000Z"
+    },
+    {
+      "_id": "70424e70acb4063d1fa2e4b6",
+      "nombre": "Bicicleta Ruta Aluminio",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 749999,
+      "stock": 6,
+      "creadoEn": "2025-08-31T16:15:00.000Z"
+    },
+    {
+      "_id": "7239b21cd5c40bd9ad775c6e",
+      "nombre": "Pelota Fútbol Oficial",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 12999,
+      "stock": 140,
+      "creadoEn": "2025-07-25T12:36:00.000Z"
+    },
+    {
+      "_id": "6d657e6fca2f2f51d1e02df1",
+      "nombre": "Colchoneta Yoga 8mm",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 19999,
+      "stock": 60,
+      "creadoEn": "2025-08-03T14:39:00.000Z"
+    },
+    {
+      "_id": "baddd65bcd01aefb61ad7be0",
+      "nombre": "Mochila Trekking 30L",
+      "categoria_id": "f511d9cb8f68d9d9b0341314",
+      "precio": 59999,
+      "stock": 34,
+      "creadoEn": "2025-07-08T13:22:00.000Z"
+    },
+    {
+      "_id": "5289c21d93e27440cea2759a",
+      "nombre": "Best Seller Tapa Dura",
+      "categoria_id": "a5534ea92b26fa8adc30543f",
+      "precio": 24999,
+      "stock": 75,
+      "creadoEn": "2025-08-24T13:29:00.000Z"
+    },
+    {
+      "_id": "d367399f4fa49ab097e4c95a",
+      "nombre": "Atlas Enciclopédico",
+      "categoria_id": "a5534ea92b26fa8adc30543f",
+      "precio": 39999,
+      "stock": 40,
+      "creadoEn": "2025-09-18T13:43:00.000Z"
+    },
+    {
+      "_id": "cca21a0c052e563ce5842eff",
+      "nombre": "Libro de Cocina Argenta",
+      "categoria_id": "a5534ea92b26fa8adc30543f",
+      "precio": 34999,
+      "stock": 28,
+      "creadoEn": "2025-08-07T14:51:00.000Z"
+    },
+    {
+      "_id": "1f2fdbffc5c087aa9df130e8",
+      "nombre": "Resmas A4 (10un)",
+      "categoria_id": "a5534ea92b26fa8adc30543f",
+      "precio": 18999,
+      "stock": 200,
+      "creadoEn": "2025-09-17T12:41:00.000Z"
+    },
+    {
+      "_id": "1de462f471e27abf6b26176f",
+      "nombre": "Agenda Ejecutiva 2026",
+      "categoria_id": "a5534ea92b26fa8adc30543f",
+      "precio": 16999,
+      "stock": 4,
+      "creadoEn": "2025-07-05T14:13:00.000Z"
+    },
+    {
+      "_id": "7fd1a8f5631d7aa90c3291c3",
+      "nombre": "Perfume Eau de Parfum 100ml",
+      "categoria_id": "e5a6e743849e63f8101ac616",
+      "precio": 89999,
+      "stock": 33,
+      "creadoEn": "2025-07-28T12:21:00.000Z"
+    },
+    {
+      "_id": "cc94ff8c1d25c90426117597",
+      "nombre": "Kit Skincare Facial",
+      "categoria_id": "e5a6e743849e63f8101ac616",
+      "precio": 44999,
+      "stock": 47,
+      "creadoEn": "2025-07-29T18:02:00.000Z"
+    },
+    {
+      "_id": "bea4a0fd61b7e52299b69486",
+      "nombre": "Cepillo Dental Eléctrico",
+      "categoria_id": "e5a6e743849e63f8101ac616",
+      "precio": 59999,
+      "stock": 29,
+      "creadoEn": "2025-09-28T10:54:00.000Z"
+    },
+    {
+      "_id": "ae8d6e6d6b554fa7116b520f",
+      "nombre": "Secador Profesional 2200W",
+      "categoria_id": "e5a6e743849e63f8101ac616",
+      "precio": 79999,
+      "stock": 19,
+      "creadoEn": "2025-09-10T14:42:00.000Z"
+    },
+    {
+      "_id": "15acdbf9593a31d5c9cdfd9a",
+      "nombre": "Auto Control Remoto 4WD",
+      "categoria_id": "f8fd0ba84a167fe482ed4a92",
+      "precio": 34999,
+      "stock": 52,
+      "creadoEn": "2025-07-04T18:59:00.000Z"
+    },
+    {
+      "_id": "ab04ce522a1bf1867245f9e2",
+      "nombre": "Rompecabezas 1000 piezas",
+      "categoria_id": "f8fd0ba84a167fe482ed4a92",
+      "precio": 17999,
+      "stock": 65,
+      "creadoEn": "2025-09-18T09:43:00.000Z"
+    },
+    {
+      "_id": "176963851a9843f03fcc4176",
+      "nombre": "Muñeca Interactiva",
+      "categoria_id": "f8fd0ba84a167fe482ed4a92",
+      "precio": 29999,
+      "stock": 41,
+      "creadoEn": "2025-07-17T15:34:00.000Z"
+    },
+    {
+      "_id": "b8dc1d00ed99b6105c9de1d3",
+      "nombre": "Bloques de Construcción 500",
+      "categoria_id": "f8fd0ba84a167fe482ed4a92",
+      "precio": 39999,
+      "stock": 37,
+      "creadoEn": "2025-09-14T15:33:00.000Z"
+    },
+    {
+      "_id": "1db3c1a83c5fa21422c1fa79",
+      "nombre": "Alimento Perro Adulto 15kg",
+      "categoria_id": "c8c8050eed40ef171cc2784d",
+      "precio": 44999,
+      "stock": 58,
+      "creadoEn": "2025-09-13T16:43:00.000Z"
+    },
+    {
+      "_id": "e9a9da2174408470d1dd9878",
+      "nombre": "Rascador Torre Gato",
+      "categoria_id": "c8c8050eed40ef171cc2784d",
+      "precio": 19999,
+      "stock": 24,
+      "creadoEn": "2025-07-06T16:58:00.000Z"
+    },
+    {
+      "_id": "ca57201e5b823778254659ca",
+      "nombre": "Correa Ajustable 2m",
+      "categoria_id": "c8c8050eed40ef171cc2784d",
+      "precio": 9999,
+      "stock": 120,
+      "creadoEn": "2025-07-09T14:06:00.000Z"
+    },
+    {
+      "_id": "864df921ae4aa2b18a52bffe",
+      "nombre": "Comedero Automático",
+      "categoria_id": "c8c8050eed40ef171cc2784d",
+      "precio": 34999,
+      "stock": 7,
+      "creadoEn": "2025-07-12T15:32:00.000Z"
+    },
+    {
+      "_id": "5523f7321d1cde05c262dcc2",
+      "nombre": "Taladro Percutor 650W",
+      "categoria_id": "638b34fa781359331a3ed13a",
+      "precio": 129999,
+      "stock": 16,
+      "creadoEn": "2025-08-26T09:26:00.000Z"
+    },
+    {
+      "_id": "5bf9cc33fce3a97cc86239d0",
+      "nombre": "Juego de Llaves 46 pzas",
+      "categoria_id": "638b34fa781359331a3ed13a",
+      "precio": 49999,
+      "stock": 31,
+      "creadoEn": "2025-08-31T14:35:00.000Z"
+    },
+    {
+      "_id": "eb811278d1edee66561351b5",
+      "nombre": "Caja Herramientas Metálica",
+      "categoria_id": "638b34fa781359331a3ed13a",
+      "precio": 64999,
+      "stock": 27,
+      "creadoEn": "2025-07-19T11:02:00.000Z"
+    },
+    {
+      "_id": "4db2b7014d8b814406c71e90",
+      "nombre": "Calibrador Digital",
+      "categoria_id": "638b34fa781359331a3ed13a",
+      "precio": 24999,
+      "stock": 9,
+      "creadoEn": "2025-09-04T18:15:00.000Z"
+    },
+    {
+      "_id": "b40592a85f8c80d065b513a1",
+      "nombre": "Café en Grano 1kg",
+      "categoria_id": "32e97cc31667baf165d33764",
+      "precio": 24999,
+      "stock": 85,
+      "creadoEn": "2025-09-13T14:08:00.000Z"
+    },
+    {
+      "_id": "08d2c7bac1c74030e8f84c35",
+      "nombre": "Aceite de Oliva 500ml",
+      "categoria_id": "32e97cc31667baf165d33764",
+      "precio": 18999,
+      "stock": 100,
+      "creadoEn": "2025-07-07T14:17:00.000Z"
+    },
+    {
+      "_id": "15ebe6f77e8cb19d851a496b",
+      "nombre": "Yerba Mate 1kg",
+      "categoria_id": "32e97cc31667baf165d33764",
+      "precio": 12999,
+      "stock": 130,
+      "creadoEn": "2025-08-14T16:02:00.000Z"
+    }
   ],
-  pedidos: [
-    {_id:"68f8f58cb6fbbdfa6ccebeb0", cliente_id:"68f8f584b6fbbdfa6ccebeae", fecha:"2025-10-22T15:17:32.587Z",
-     items:[{producto_id:"68f8f53fb6fbbdfa6ccebeab",cantidad:1,precioUnit:19999},
-            {producto_id:"68f8f53fb6fbbdfa6ccebead",cantidad:2,precioUnit:89999}],
-     total:199997, estado:"pagado"},
-    {_id:"68f8f58cb6fbbdfa6ccebeb1", cliente_id:"68f8f584b6fbbdfa6ccebeaf", fecha:"2025-10-22T15:17:32.595Z",
-     items:[{producto_id:"68f8f53fb6fbbdfa6ccebeac",cantidad:1,precioUnit:499999}],
-     total:499999, estado:"pendiente"}
+  "pedidos": [
+    {
+      "_id": "e8b895d3f760288851848c47",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-07-06T19:45:04.000Z",
+      "items": [
+        {
+          "producto_id": "7fd1a8f5631d7aa90c3291c3",
+          "cantidad": 1,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 89999,
+      "estado": "pagado"
+    },
+    {
+      "_id": "66872ba4aa492d1b11133483",
+      "cliente_id": "54678d99215f8529600bc82e",
+      "fecha": "2025-07-07T08:44:07.000Z",
+      "items": [
+        {
+          "producto_id": "bea4a0fd61b7e52299b69486",
+          "cantidad": 4,
+          "precioUnit": 59999
+        },
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeab",
+          "cantidad": 2,
+          "precioUnit": 19999
+        },
+        {
+          "producto_id": "cc94ff8c1d25c90426117597",
+          "cantidad": 2,
+          "precioUnit": 44999
+        }
+      ],
+      "total": 369992,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "f98b9fda73ac4098320302fc",
+      "cliente_id": "96ac0a68b20da723a5f02757",
+      "fecha": "2025-07-09T19:24:59.000Z",
+      "items": [
+        {
+          "producto_id": "d454b2004fac10475f4d1179",
+          "cantidad": 1,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 24999,
+      "estado": "pagado"
+    },
+    {
+      "_id": "626e56dc9c37c00415e21ff5",
+      "cliente_id": "55ec41a6fdfc44b574738eb2",
+      "fecha": "2025-07-11T14:28:46.000Z",
+      "items": [
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 2,
+          "precioUnit": 899999
+        }
+      ],
+      "total": 1799998,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "208ead92e9e8c1ae80fa66db",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-07-13T11:24:24.000Z",
+      "items": [
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 1,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 12999,
+      "estado": "pagado"
+    },
+    {
+      "_id": "3d6e5c2fb8f06d5cf6c04f75",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeae",
+      "fecha": "2025-07-14T12:10:36.000Z",
+      "items": [
+        {
+          "producto_id": "68f8f52bb6fbbdfa6ccebea9",
+          "cantidad": 1,
+          "precioUnit": 499999
+        },
+        {
+          "producto_id": "1a55db4466426fae9480469a",
+          "cantidad": 2,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "7fd1a8f5631d7aa90c3291c3",
+          "cantidad": 2,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 739995,
+      "estado": "pagado"
+    },
+    {
+      "_id": "080969e88f7c53cb47868adc",
+      "cliente_id": "1f62fdcf7b663723ec0a9ee3",
+      "fecha": "2025-07-14T19:04:57.000Z",
+      "items": [
+        {
+          "producto_id": "e9a9da2174408470d1dd9878",
+          "cantidad": 3,
+          "precioUnit": 19999
+        }
+      ],
+      "total": 59997,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "16045bac99fa58b1a35a6d8f",
+      "cliente_id": "55ec41a6fdfc44b574738eb2",
+      "fecha": "2025-07-21T15:58:31.000Z",
+      "items": [
+        {
+          "producto_id": "15ebe6f77e8cb19d851a496b",
+          "cantidad": 3,
+          "precioUnit": 12999
+        },
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 2,
+          "precioUnit": 29999
+        }
+      ],
+      "total": 98995,
+      "estado": "entregado"
+    },
+    {
+      "_id": "2ffc26f6fad4ee166547dc98",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeaf",
+      "fecha": "2025-07-23T09:48:28.000Z",
+      "items": [
+        {
+          "producto_id": "d367399f4fa49ab097e4c95a",
+          "cantidad": 1,
+          "precioUnit": 39999
+        },
+        {
+          "producto_id": "eb811278d1edee66561351b5",
+          "cantidad": 4,
+          "precioUnit": 64999
+        }
+      ],
+      "total": 299995,
+      "estado": "pagado"
+    },
+    {
+      "_id": "50e9a795c5321868133553c8",
+      "cliente_id": "54678d99215f8529600bc82e",
+      "fecha": "2025-07-24T08:09:59.000Z",
+      "items": [
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 2,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 25998,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "33bbb44309d2564a930241d4",
+      "cliente_id": "ccdca9c885e1de382d7ab7e7",
+      "fecha": "2025-07-25T08:06:21.000Z",
+      "items": [
+        {
+          "producto_id": "df7651267a6c0141cdd0d708",
+          "cantidad": 1,
+          "precioUnit": 49999
+        },
+        {
+          "producto_id": "15acdbf9593a31d5c9cdfd9a",
+          "cantidad": 3,
+          "precioUnit": 34999
+        }
+      ],
+      "total": 154996,
+      "estado": "pagado"
+    },
+    {
+      "_id": "afb75371503e5770f5b8dd48",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-07-25T10:36:36.000Z",
+      "items": [
+        {
+          "producto_id": "5289c21d93e27440cea2759a",
+          "cantidad": 1,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 24999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "09042f990ba417fd2d9cd2a4",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeae",
+      "fecha": "2025-07-25T10:40:32.000Z",
+      "items": [
+        {
+          "producto_id": "a542a7ee09918825134784fc",
+          "cantidad": 1,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 54999,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "4b3ab0723a0bdf6216b15e2c",
+      "cliente_id": "157a2ff2ae7ac440ca3bd0e6",
+      "fecha": "2025-07-26T08:25:40.000Z",
+      "items": [
+        {
+          "producto_id": "43ac8a41445823bb168636e9",
+          "cantidad": 1,
+          "precioUnit": 79999
+        },
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebead",
+          "cantidad": 3,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 349996,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "554886d179175fb0608dcfae",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeae",
+      "fecha": "2025-07-26T09:48:31.000Z",
+      "items": [
+        {
+          "producto_id": "601ee8d9224ecde331ce692e",
+          "cantidad": 2,
+          "precioUnit": 34999
+        },
+        {
+          "producto_id": "5289c21d93e27440cea2759a",
+          "cantidad": 3,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 144995,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "79e1d26f46dcac1b0f269ca2",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeaf",
+      "fecha": "2025-07-26T13:22:57.000Z",
+      "items": [
+        {
+          "producto_id": "a542a7ee09918825134784fc",
+          "cantidad": 2,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 109998,
+      "estado": "pagado"
+    },
+    {
+      "_id": "3be973e21b56c3a39b4f0de3",
+      "cliente_id": "91f4f87fd7312742bc9c2ded",
+      "fecha": "2025-07-26T15:22:46.000Z",
+      "items": [
+        {
+          "producto_id": "15acdbf9593a31d5c9cdfd9a",
+          "cantidad": 1,
+          "precioUnit": 34999
+        },
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 1,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "d4af211849b3a47ed1640ca4",
+          "cantidad": 2,
+          "precioUnit": 349999
+        }
+      ],
+      "total": 764996,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "7f9c62d13cf18cc9a06acd79",
+      "cliente_id": "a43c67b26752d5f56c813172",
+      "fecha": "2025-07-27T13:35:35.000Z",
+      "items": [
+        {
+          "producto_id": "5bf9cc33fce3a97cc86239d0",
+          "cantidad": 1,
+          "precioUnit": 49999
+        }
+      ],
+      "total": 49999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "f6ff09ef39e2b3f2e1bae743",
+      "cliente_id": "157a2ff2ae7ac440ca3bd0e6",
+      "fecha": "2025-07-27T19:00:44.000Z",
+      "items": [
+        {
+          "producto_id": "b8dc1d00ed99b6105c9de1d3",
+          "cantidad": 1,
+          "precioUnit": 39999
+        }
+      ],
+      "total": 39999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "5747340ca158f98dd68d7e71",
+      "cliente_id": "ccdca9c885e1de382d7ab7e7",
+      "fecha": "2025-07-28T13:56:24.000Z",
+      "items": [
+        {
+          "producto_id": "ab04ce522a1bf1867245f9e2",
+          "cantidad": 1,
+          "precioUnit": 17999
+        },
+        {
+          "producto_id": "43ac8a41445823bb168636e9",
+          "cantidad": 1,
+          "precioUnit": 79999
+        }
+      ],
+      "total": 97998,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "5ab29cf25cba45a577c71a14",
+      "cliente_id": "deb32f7e716739049da40124",
+      "fecha": "2025-07-29T13:31:28.000Z",
+      "items": [
+        {
+          "producto_id": "bea4a0fd61b7e52299b69486",
+          "cantidad": 1,
+          "precioUnit": 59999
+        }
+      ],
+      "total": 59999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "49797c3ec30635def0adb183",
+      "cliente_id": "78cc2f3e99cd3ef86489b2a8",
+      "fecha": "2025-07-30T12:36:50.000Z",
+      "items": [
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 1,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 12999,
+      "estado": "enviado"
+    },
+    {
+      "_id": "eb6d1a0b01241de6765610b1",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-07-31T16:53:44.000Z",
+      "items": [
+        {
+          "producto_id": "1a55db4466426fae9480469a",
+          "cantidad": 2,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "15ebe6f77e8cb19d851a496b",
+          "cantidad": 2,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 85996,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "50aeda218b143f471204c5b1",
+      "cliente_id": "91f4f87fd7312742bc9c2ded",
+      "fecha": "2025-07-31T19:59:30.000Z",
+      "items": [
+        {
+          "producto_id": "68f8f52bb6fbbdfa6ccebeaa",
+          "cantidad": 1,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 89999,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "75482dcec0ad0e27f6fee4de",
+      "cliente_id": "55ec41a6fdfc44b574738eb2",
+      "fecha": "2025-08-01T14:52:13.000Z",
+      "items": [
+        {
+          "producto_id": "0463a585f85743b5bfb3b49c",
+          "cantidad": 1,
+          "precioUnit": 32999
+        },
+        {
+          "producto_id": "08d2c7bac1c74030e8f84c35",
+          "cantidad": 1,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 51998,
+      "estado": "entregado"
+    },
+    {
+      "_id": "897ab1c35df48b022bb193e6",
+      "cliente_id": "a43c67b26752d5f56c813172",
+      "fecha": "2025-08-02T21:29:21.000Z",
+      "items": [
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 1,
+          "precioUnit": 12999
+        },
+        {
+          "producto_id": "3e47c9a57575449e88336837",
+          "cantidad": 1,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 102998,
+      "estado": "enviado"
+    },
+    {
+      "_id": "e30e6c14b08c8874a511fc8a",
+      "cliente_id": "f1f7393e8c6854871f7de569",
+      "fecha": "2025-08-04T22:41:39.000Z",
+      "items": [
+        {
+          "producto_id": "ab04ce522a1bf1867245f9e2",
+          "cantidad": 1,
+          "precioUnit": 17999
+        }
+      ],
+      "total": 17999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "62ed8eb656b4158e2cff174d",
+      "cliente_id": "1f62fdcf7b663723ec0a9ee3",
+      "fecha": "2025-08-05T08:30:23.000Z",
+      "items": [
+        {
+          "producto_id": "08d2c7bac1c74030e8f84c35",
+          "cantidad": 3,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 56997,
+      "estado": "pagado"
+    },
+    {
+      "_id": "75d7fc3c95ba223305485b44",
+      "cliente_id": "b4d5af9cbb07fcc9b92a9d2a",
+      "fecha": "2025-08-05T12:55:02.000Z",
+      "items": [
+        {
+          "producto_id": "df7651267a6c0141cdd0d708",
+          "cantidad": 2,
+          "precioUnit": 49999
+        },
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 2,
+          "precioUnit": 899999
+        }
+      ],
+      "total": 1899996,
+      "estado": "enviado"
+    },
+    {
+      "_id": "28f362a609396b3cc11d2574",
+      "cliente_id": "a43c67b26752d5f56c813172",
+      "fecha": "2025-08-05T16:11:35.000Z",
+      "items": [
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 1,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "eb811278d1edee66561351b5",
+          "cantidad": 4,
+          "precioUnit": 64999
+        }
+      ],
+      "total": 289995,
+      "estado": "enviado"
+    },
+    {
+      "_id": "e56a823d32cddef78411b752",
+      "cliente_id": "6c7d4bce8f8233aed1b34a9d",
+      "fecha": "2025-08-13T11:47:47.000Z",
+      "items": [
+        {
+          "producto_id": "1f2fdbffc5c087aa9df130e8",
+          "cantidad": 3,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 56997,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "9ecddf5f61422fcfa2fbec39",
+      "cliente_id": "37597f2e16b7669251782d89",
+      "fecha": "2025-08-15T08:01:09.000Z",
+      "items": [
+        {
+          "producto_id": "62ec6ab32b6073e5dd3a641c",
+          "cantidad": 3,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 269997,
+      "estado": "entregado"
+    },
+    {
+      "_id": "a04c2c7c19a6f603505d3aa3",
+      "cliente_id": "37597f2e16b7669251782d89",
+      "fecha": "2025-08-16T18:11:20.000Z",
+      "items": [
+        {
+          "producto_id": "3e47c9a57575449e88336837",
+          "cantidad": 1,
+          "precioUnit": 89999
+        },
+        {
+          "producto_id": "bbf87106541fd9ffa40c7ae2",
+          "cantidad": 3,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "1de462f471e27abf6b26176f",
+          "cantidad": 1,
+          "precioUnit": 16999
+        },
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 1,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 209994,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "98a690a24de6d573f2c11751",
+      "cliente_id": "6c7d4bce8f8233aed1b34a9d",
+      "fecha": "2025-08-21T15:47:05.000Z",
+      "items": [
+        {
+          "producto_id": "d4af211849b3a47ed1640ca4",
+          "cantidad": 1,
+          "precioUnit": 349999
+        },
+        {
+          "producto_id": "1db3c1a83c5fa21422c1fa79",
+          "cantidad": 1,
+          "precioUnit": 44999
+        },
+        {
+          "producto_id": "e97f46ed8bce7476acbdef8e",
+          "cantidad": 2,
+          "precioUnit": 14999
+        },
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebead",
+          "cantidad": 1,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 514995,
+      "estado": "pagado"
+    },
+    {
+      "_id": "43146c2651f7c116881189cd",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeaf",
+      "fecha": "2025-08-22T09:49:39.000Z",
+      "items": [
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 1,
+          "precioUnit": 29999
+        }
+      ],
+      "total": 29999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "6bb4bdbea3945afaf8b51579",
+      "cliente_id": "54678d99215f8529600bc82e",
+      "fecha": "2025-08-31T20:08:08.000Z",
+      "items": [
+        {
+          "producto_id": "3e47c9a57575449e88336837",
+          "cantidad": 4,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 359996,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "a94e6d023bcd4a4efdaf0d20",
+      "cliente_id": "78cc2f3e99cd3ef86489b2a8",
+      "fecha": "2025-09-07T09:18:50.000Z",
+      "items": [
+        {
+          "producto_id": "08d2c7bac1c74030e8f84c35",
+          "cantidad": 1,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 18999,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "10592d952ebb4629fdaa460c",
+      "cliente_id": "370aeea0860b848b6f2e8394",
+      "fecha": "2025-09-07T14:40:59.000Z",
+      "items": [
+        {
+          "producto_id": "d454b2004fac10475f4d1179",
+          "cantidad": 2,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 49998,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "36d5ce0e7384229da651a79a",
+      "cliente_id": "157a2ff2ae7ac440ca3bd0e6",
+      "fecha": "2025-09-09T12:24:58.000Z",
+      "items": [
+        {
+          "producto_id": "d454b2004fac10475f4d1179",
+          "cantidad": 2,
+          "precioUnit": 24999
+        },
+        {
+          "producto_id": "7fd1a8f5631d7aa90c3291c3",
+          "cantidad": 2,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 229996,
+      "estado": "pagado"
+    },
+    {
+      "_id": "b22c4ec0c41b9175795419b3",
+      "cliente_id": "a4040316b80ef7422abf5e7e",
+      "fecha": "2025-09-09T16:50:52.000Z",
+      "items": [
+        {
+          "producto_id": "baddd65bcd01aefb61ad7be0",
+          "cantidad": 4,
+          "precioUnit": 59999
+        }
+      ],
+      "total": 239996,
+      "estado": "enviado"
+    },
+    {
+      "_id": "0dc652074e6b9fd5baa7f542",
+      "cliente_id": "b6cedb0235a852e55cbab933",
+      "fecha": "2025-09-09T20:15:57.000Z",
+      "items": [
+        {
+          "producto_id": "43ac8a41445823bb168636e9",
+          "cantidad": 4,
+          "precioUnit": 79999
+        },
+        {
+          "producto_id": "15acdbf9593a31d5c9cdfd9a",
+          "cantidad": 2,
+          "precioUnit": 34999
+        },
+        {
+          "producto_id": "1db3c1a83c5fa21422c1fa79",
+          "cantidad": 1,
+          "precioUnit": 44999
+        }
+      ],
+      "total": 434993,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "6016004cfa20c38579a83a68",
+      "cliente_id": "370aeea0860b848b6f2e8394",
+      "fecha": "2025-09-11T12:56:54.000Z",
+      "items": [
+        {
+          "producto_id": "ca57201e5b823778254659ca",
+          "cantidad": 3,
+          "precioUnit": 9999
+        }
+      ],
+      "total": 29997,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "4483c86ada1bbd016794bb1b",
+      "cliente_id": "ccdca9c885e1de382d7ab7e7",
+      "fecha": "2025-09-11T16:39:09.000Z",
+      "items": [
+        {
+          "producto_id": "6b7044d134c9c3132420c9de",
+          "cantidad": 1,
+          "precioUnit": 119999
+        }
+      ],
+      "total": 119999,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "4ce19840b08863c61694899f",
+      "cliente_id": "deb32f7e716739049da40124",
+      "fecha": "2025-09-16T09:27:08.000Z",
+      "items": [
+        {
+          "producto_id": "6d657e6fca2f2f51d1e02df1",
+          "cantidad": 1,
+          "precioUnit": 19999
+        },
+        {
+          "producto_id": "5bf9cc33fce3a97cc86239d0",
+          "cantidad": 2,
+          "precioUnit": 49999
+        },
+        {
+          "producto_id": "5523f7321d1cde05c262dcc2",
+          "cantidad": 3,
+          "precioUnit": 129999
+        },
+        {
+          "producto_id": "294f1c9c3877df499bf33a22",
+          "cantidad": 2,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 619992,
+      "estado": "pagado"
+    },
+    {
+      "_id": "76c985016f1f2473777b54c1",
+      "cliente_id": "5b5fed4a824882f2ab9d9d00",
+      "fecha": "2025-09-17T19:36:14.000Z",
+      "items": [
+        {
+          "producto_id": "3e47c9a57575449e88336837",
+          "cantidad": 1,
+          "precioUnit": 89999
+        },
+        {
+          "producto_id": "5bf9cc33fce3a97cc86239d0",
+          "cantidad": 1,
+          "precioUnit": 49999
+        },
+        {
+          "producto_id": "df7651267a6c0141cdd0d708",
+          "cantidad": 1,
+          "precioUnit": 49999
+        },
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 1,
+          "precioUnit": 899999
+        }
+      ],
+      "total": 1089996,
+      "estado": "pagado"
+    },
+    {
+      "_id": "1ccdee4a97269a66eb07455c",
+      "cliente_id": "b768447f4e71d7e71ad5518e",
+      "fecha": "2025-09-17T20:06:59.000Z",
+      "items": [
+        {
+          "producto_id": "d4af211849b3a47ed1640ca4",
+          "cantidad": 1,
+          "precioUnit": 349999
+        }
+      ],
+      "total": 349999,
+      "estado": "pagado"
+    },
+    {
+      "_id": "d9db4912142b86262abaf872",
+      "cliente_id": "deb32f7e716739049da40124",
+      "fecha": "2025-09-18T09:22:22.000Z",
+      "items": [
+        {
+          "producto_id": "ae8d6e6d6b554fa7116b520f",
+          "cantidad": 1,
+          "precioUnit": 79999
+        },
+        {
+          "producto_id": "1fc56585dd1fadb6bf4c876b",
+          "cantidad": 2,
+          "precioUnit": 64999
+        }
+      ],
+      "total": 209997,
+      "estado": "pagado"
+    },
+    {
+      "_id": "d44b95ef5e53fe63b2b925a0",
+      "cliente_id": "55ec41a6fdfc44b574738eb2",
+      "fecha": "2025-09-18T12:10:04.000Z",
+      "items": [
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 1,
+          "precioUnit": 899999
+        }
+      ],
+      "total": 899999,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "4c4fa66547ad618ad5a9411f",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-09-19T20:00:14.000Z",
+      "items": [
+        {
+          "producto_id": "a542a7ee09918825134784fc",
+          "cantidad": 2,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 109998,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "06b7c5954090c4c75932338c",
+      "cliente_id": "370aeea0860b848b6f2e8394",
+      "fecha": "2025-09-23T20:34:50.000Z",
+      "items": [
+        {
+          "producto_id": "eb811278d1edee66561351b5",
+          "cantidad": 1,
+          "precioUnit": 64999
+        }
+      ],
+      "total": 64999,
+      "estado": "cancelado"
+    },
+    {
+      "_id": "abc1f768eb8c5e8a1ca5a0fa",
+      "cliente_id": "37597f2e16b7669251782d89",
+      "fecha": "2025-09-24T12:15:16.000Z",
+      "items": [
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeac",
+          "cantidad": 2,
+          "precioUnit": 499999
+        },
+        {
+          "producto_id": "4db2b7014d8b814406c71e90",
+          "cantidad": 1,
+          "precioUnit": 24999
+        },
+        {
+          "producto_id": "08d2c7bac1c74030e8f84c35",
+          "cantidad": 1,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 1043996,
+      "estado": "pagado"
+    },
+    {
+      "_id": "2253d62aa61cc6bbe779dd1f",
+      "cliente_id": "b6cedb0235a852e55cbab933",
+      "fecha": "2025-09-26T10:44:55.000Z",
+      "items": [
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 4,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "4db2b7014d8b814406c71e90",
+          "cantidad": 2,
+          "precioUnit": 24999
+        },
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 3,
+          "precioUnit": 899999
+        },
+        {
+          "producto_id": "a542a7ee09918825134784fc",
+          "cantidad": 4,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 3089987,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "5f35ff4b7936d61998a8f7b7",
+      "cliente_id": "b768447f4e71d7e71ad5518e",
+      "fecha": "2025-09-26T17:08:19.000Z",
+      "items": [
+        {
+          "producto_id": "4db2b7014d8b814406c71e90",
+          "cantidad": 2,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 49998,
+      "estado": "pagado"
+    },
+    {
+      "_id": "e798f0b869eceb2d1a95e69b",
+      "cliente_id": "a43c67b26752d5f56c813172",
+      "fecha": "2025-09-29T17:07:49.000Z",
+      "items": [
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 1,
+          "precioUnit": 899999
+        },
+        {
+          "producto_id": "864df921ae4aa2b18a52bffe",
+          "cantidad": 3,
+          "precioUnit": 34999
+        }
+      ],
+      "total": 1004996,
+      "estado": "entregado"
+    },
+    {
+      "_id": "049cddebac89cf42a2286682",
+      "cliente_id": "b4d5af9cbb07fcc9b92a9d2a",
+      "fecha": "2025-09-30T13:35:03.000Z",
+      "items": [
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeab",
+          "cantidad": 1,
+          "precioUnit": 19999
+        },
+        {
+          "producto_id": "294f1c9c3877df499bf33a22",
+          "cantidad": 4,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 239995,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "d746c3bc658b446b5825392b",
+      "cliente_id": "78cc2f3e99cd3ef86489b2a8",
+      "fecha": "2025-09-30T15:57:37.000Z",
+      "items": [
+        {
+          "producto_id": "a0cc162f803d7caf9fe9b8d8",
+          "cantidad": 1,
+          "precioUnit": 44999
+        },
+        {
+          "producto_id": "864df921ae4aa2b18a52bffe",
+          "cantidad": 2,
+          "precioUnit": 34999
+        }
+      ],
+      "total": 114997,
+      "estado": "entregado"
+    },
+    {
+      "_id": "f38a2442244c5fb797206d6d",
+      "cliente_id": "96ac0a68b20da723a5f02757",
+      "fecha": "2025-10-05T22:35:57.000Z",
+      "items": [
+        {
+          "producto_id": "294f1c9c3877df499bf33a22",
+          "cantidad": 2,
+          "precioUnit": 54999
+        }
+      ],
+      "total": 109998,
+      "estado": "enviado"
+    },
+    {
+      "_id": "8efea33d6e59710a99731a86",
+      "cliente_id": "1f62fdcf7b663723ec0a9ee3",
+      "fecha": "2025-10-07T12:46:51.000Z",
+      "items": [
+        {
+          "producto_id": "3e7d80fdfed273606f4c76ff",
+          "cantidad": 1,
+          "precioUnit": 899999
+        }
+      ],
+      "total": 899999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "5b917e67850c1b6c892e3000",
+      "cliente_id": "54678d99215f8529600bc82e",
+      "fecha": "2025-10-08T15:49:52.000Z",
+      "items": [
+        {
+          "producto_id": "08d2c7bac1c74030e8f84c35",
+          "cantidad": 1,
+          "precioUnit": 18999
+        },
+        {
+          "producto_id": "b8dc1d00ed99b6105c9de1d3",
+          "cantidad": 3,
+          "precioUnit": 39999
+        },
+        {
+          "producto_id": "176963851a9843f03fcc4176",
+          "cantidad": 1,
+          "precioUnit": 29999
+        }
+      ],
+      "total": 168995,
+      "estado": "pagado"
+    },
+    {
+      "_id": "1798ffe2d95acfc01400c8a8",
+      "cliente_id": "e0674599453a72aeecbaf53f",
+      "fecha": "2025-10-14T11:31:24.000Z",
+      "items": [
+        {
+          "producto_id": "ca57201e5b823778254659ca",
+          "cantidad": 1,
+          "precioUnit": 9999
+        },
+        {
+          "producto_id": "6b7044d134c9c3132420c9de",
+          "cantidad": 1,
+          "precioUnit": 119999
+        }
+      ],
+      "total": 129998,
+      "estado": "pagado"
+    },
+    {
+      "_id": "dd29cbe0bf993fe74713380e",
+      "cliente_id": "f3adadc16800276c9d1803de",
+      "fecha": "2025-10-15T14:22:59.000Z",
+      "items": [
+        {
+          "producto_id": "a8cfba4a91f34c20f9c7e9b6",
+          "cantidad": 1,
+          "precioUnit": 18999
+        }
+      ],
+      "total": 18999,
+      "estado": "entregado"
+    },
+    {
+      "_id": "dc1f0e6b7665e47299a7e716",
+      "cliente_id": "3938f5c7bb7b5282eff8d1d0",
+      "fecha": "2025-10-16T10:05:57.000Z",
+      "items": [
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebead",
+          "cantidad": 1,
+          "precioUnit": 89999
+        },
+        {
+          "producto_id": "7fd1a8f5631d7aa90c3291c3",
+          "cantidad": 4,
+          "precioUnit": 89999
+        },
+        {
+          "producto_id": "43ac8a41445823bb168636e9",
+          "cantidad": 1,
+          "precioUnit": 79999
+        },
+        {
+          "producto_id": "4db2b7014d8b814406c71e90",
+          "cantidad": 2,
+          "precioUnit": 24999
+        }
+      ],
+      "total": 579992,
+      "estado": "pagado"
+    },
+    {
+      "_id": "a67b729c3034c9c78948f8cc",
+      "cliente_id": "54678d99215f8529600bc82e",
+      "fecha": "2025-10-17T14:35:32.000Z",
+      "items": [
+        {
+          "producto_id": "bea4a0fd61b7e52299b69486",
+          "cantidad": 1,
+          "precioUnit": 59999
+        },
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeab",
+          "cantidad": 1,
+          "precioUnit": 19999
+        },
+        {
+          "producto_id": "15ebe6f77e8cb19d851a496b",
+          "cantidad": 1,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 92997,
+      "estado": "enviado"
+    },
+    {
+      "_id": "0d51358a4f067b37c20df2d5",
+      "cliente_id": "f1f7393e8c6854871f7de569",
+      "fecha": "2025-10-18T19:44:38.000Z",
+      "items": [
+        {
+          "producto_id": "1a55db4466426fae9480469a",
+          "cantidad": 1,
+          "precioUnit": 29999
+        },
+        {
+          "producto_id": "70424e70acb4063d1fa2e4b6",
+          "cantidad": 1,
+          "precioUnit": 749999
+        },
+        {
+          "producto_id": "371f7459fbc249e9e6f39d3b",
+          "cantidad": 1,
+          "precioUnit": 27999
+        },
+        {
+          "producto_id": "7239b21cd5c40bd9ad775c6e",
+          "cantidad": 2,
+          "precioUnit": 12999
+        }
+      ],
+      "total": 833995,
+      "estado": "pendiente"
+    },
+    {
+      "_id": "68f8f58cb6fbbdfa6ccebeb0",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeae",
+      "fecha": "2025-10-22T15:17:32.587Z",
+      "items": [
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeab",
+          "cantidad": 1,
+          "precioUnit": 19999
+        },
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebead",
+          "cantidad": 2,
+          "precioUnit": 89999
+        }
+      ],
+      "total": 199997,
+      "estado": "pagado"
+    },
+    {
+      "_id": "68f8f58cb6fbbdfa6ccebeb1",
+      "cliente_id": "68f8f584b6fbbdfa6ccebeaf",
+      "fecha": "2025-10-22T15:17:32.595Z",
+      "items": [
+        {
+          "producto_id": "68f8f53fb6fbbdfa6ccebeac",
+          "cantidad": 1,
+          "precioUnit": 499999
+        }
+      ],
+      "total": 499999,
+      "estado": "pendiente"
+    }
   ],
-  pagos: [
-    {_id:"68f8f593b6fbbdfa6ccebeb2", pedido_id:"68f8f58cb6fbbdfa6ccebeb0", metodo:"tarjeta", estado:"aprobado",  txId:"MP-001", creadoEn:"2025-10-22T15:17:39.414Z"},
-    {_id:"68f8f593b6fbbdfa6ccebeb3", pedido_id:"68f8f58cb6fbbdfa6ccebeb1", metodo:"tarjeta", estado:"pendiente", txId:null,     creadoEn:"2025-10-22T15:17:39.424Z"}
+  "pagos": [
+    {
+      "_id": "68f8f593b6fbbdfa6ccebeb2",
+      "pedido_id": "68f8f58cb6fbbdfa6ccebeb0",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-001",
+      "creadoEn": "2025-10-22T15:17:39.414Z"
+    },
+    {
+      "_id": "68f8f593b6fbbdfa6ccebeb3",
+      "pedido_id": "68f8f58cb6fbbdfa6ccebeb1",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-10-22T15:17:39.424Z"
+    },
+    {
+      "_id": "b3343dd5c11f70dfd55ee942",
+      "pedido_id": "f98b9fda73ac4098320302fc",
+      "metodo": "efectivo",
+      "estado": "aprobado",
+      "txId": "MP-0002",
+      "creadoEn": "2025-07-09T19:59:12.000Z"
+    },
+    {
+      "_id": "4390c7886a2fb7b039594837",
+      "pedido_id": "626e56dc9c37c00415e21ff5",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-07-11T15:03:49.000Z"
+    },
+    {
+      "_id": "573b5d42293143662f2c27fd",
+      "pedido_id": "208ead92e9e8c1ae80fa66db",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0003",
+      "creadoEn": "2025-07-13T11:47:59.000Z"
+    },
+    {
+      "_id": "bc4896b0d7a7558e401df39a",
+      "pedido_id": "3d6e5c2fb8f06d5cf6c04f75",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0004",
+      "creadoEn": "2025-07-14T12:47:13.000Z"
+    },
+    {
+      "_id": "458c7197fdae696e155ab96e",
+      "pedido_id": "080969e88f7c53cb47868adc",
+      "metodo": "efectivo",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-07-14T19:58:23.000Z"
+    },
+    {
+      "_id": "b872d234bb361e70c8f191e6",
+      "pedido_id": "16045bac99fa58b1a35a6d8f",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0005",
+      "creadoEn": "2025-07-21T16:23:28.000Z"
+    },
+    {
+      "_id": "b728205ed7de82f897be6a8e",
+      "pedido_id": "2ffc26f6fad4ee166547dc98",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0006",
+      "creadoEn": "2025-07-23T10:05:31.000Z"
+    },
+    {
+      "_id": "3146208c248b7c4cc9c83e63",
+      "pedido_id": "50e9a795c5321868133553c8",
+      "metodo": "efectivo",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-07-24T08:46:59.000Z"
+    },
+    {
+      "_id": "ad31a8c9b4a84312177b752f",
+      "pedido_id": "33bbb44309d2564a930241d4",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0007",
+      "creadoEn": "2025-07-25T08:56:50.000Z"
+    },
+    {
+      "_id": "42701036c75b01c24682e460",
+      "pedido_id": "afb75371503e5770f5b8dd48",
+      "metodo": "efectivo",
+      "estado": "aprobado",
+      "txId": "MP-0008",
+      "creadoEn": "2025-07-25T10:43:44.000Z"
+    },
+    {
+      "_id": "3c7b07c8f7a45a0e84a3ed31",
+      "pedido_id": "09042f990ba417fd2d9cd2a4",
+      "metodo": "transferencia",
+      "estado": "rechazado",
+      "txId": "MP-0009",
+      "creadoEn": "2025-07-25T11:29:29.000Z"
+    },
+    {
+      "_id": "5241c00c7951219efa0abc23",
+      "pedido_id": "4b3ab0723a0bdf6216b15e2c",
+      "metodo": "transferencia",
+      "estado": "rechazado",
+      "txId": "MP-0010",
+      "creadoEn": "2025-07-26T08:55:28.000Z"
+    },
+    {
+      "_id": "a5eb06b40b8879857d9d287d",
+      "pedido_id": "554886d179175fb0608dcfae",
+      "metodo": "mercado_pago",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-07-26T10:42:30.000Z"
+    },
+    {
+      "_id": "7c8be95951fd3ac24651a0f2",
+      "pedido_id": "79e1d26f46dcac1b0f269ca2",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0011",
+      "creadoEn": "2025-07-26T13:48:10.000Z"
+    },
+    {
+      "_id": "130a679903b0eaed7a5bedc0",
+      "pedido_id": "3be973e21b56c3a39b4f0de3",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-07-26T15:36:43.000Z"
+    },
+    {
+      "_id": "bd1381363a9f88bc9ab61c88",
+      "pedido_id": "7f9c62d13cf18cc9a06acd79",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0012",
+      "creadoEn": "2025-07-27T13:38:31.000Z"
+    },
+    {
+      "_id": "755f55c6b993ce4f76bf98f4",
+      "pedido_id": "f6ff09ef39e2b3f2e1bae743",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0013",
+      "creadoEn": "2025-07-27T19:41:51.000Z"
+    },
+    {
+      "_id": "35cfde8991724e3449931577",
+      "pedido_id": "5747340ca158f98dd68d7e71",
+      "metodo": "transferencia",
+      "estado": "rechazado",
+      "txId": "MP-0014",
+      "creadoEn": "2025-07-28T14:11:42.000Z"
+    },
+    {
+      "_id": "e94b910c5d6dd3a90c640828",
+      "pedido_id": "5ab29cf25cba45a577c71a14",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0015",
+      "creadoEn": "2025-07-29T14:27:34.000Z"
+    },
+    {
+      "_id": "0b67983462190618c2287a39",
+      "pedido_id": "49797c3ec30635def0adb183",
+      "metodo": "efectivo",
+      "estado": "aprobado",
+      "txId": "MP-0016",
+      "creadoEn": "2025-07-30T12:47:27.000Z"
+    },
+    {
+      "_id": "31c5e1a655904f9f720d35cd",
+      "pedido_id": "eb6d1a0b01241de6765610b1",
+      "metodo": "tarjeta",
+      "estado": "rechazado",
+      "txId": "MP-0017",
+      "creadoEn": "2025-07-31T17:29:41.000Z"
+    },
+    {
+      "_id": "0fedd0b170383847b2b09a02",
+      "pedido_id": "50aeda218b143f471204c5b1",
+      "metodo": "tarjeta",
+      "estado": "rechazado",
+      "txId": "MP-0018",
+      "creadoEn": "2025-07-31T20:50:09.000Z"
+    },
+    {
+      "_id": "90a064dad0da36f15d8287e0",
+      "pedido_id": "75482dcec0ad0e27f6fee4de",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0019",
+      "creadoEn": "2025-08-01T15:39:55.000Z"
+    },
+    {
+      "_id": "47b0a54ff4046ffff3562b8a",
+      "pedido_id": "897ab1c35df48b022bb193e6",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0020",
+      "creadoEn": "2025-08-02T22:05:39.000Z"
+    },
+    {
+      "_id": "32fe58328cd4b82ff2ee58f1",
+      "pedido_id": "e30e6c14b08c8874a511fc8a",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0021",
+      "creadoEn": "2025-08-04T23:10:18.000Z"
+    },
+    {
+      "_id": "ebce667eee4c12c94933a5b7",
+      "pedido_id": "62ed8eb656b4158e2cff174d",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0022",
+      "creadoEn": "2025-08-05T09:27:51.000Z"
+    },
+    {
+      "_id": "9b5d7230c046bfc1efd75736",
+      "pedido_id": "75d7fc3c95ba223305485b44",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0023",
+      "creadoEn": "2025-08-05T13:52:57.000Z"
+    },
+    {
+      "_id": "b659b98ec87d0f86b88a0464",
+      "pedido_id": "28f362a609396b3cc11d2574",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0024",
+      "creadoEn": "2025-08-05T16:53:15.000Z"
+    },
+    {
+      "_id": "24ebe7a1829e86507eee15ab",
+      "pedido_id": "e56a823d32cddef78411b752",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-08-13T12:19:26.000Z"
+    },
+    {
+      "_id": "1ba1bbf928025dd22c04bf42",
+      "pedido_id": "9ecddf5f61422fcfa2fbec39",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0025",
+      "creadoEn": "2025-08-15T08:09:45.000Z"
+    },
+    {
+      "_id": "0c077c973a7790e4ad320520",
+      "pedido_id": "a04c2c7c19a6f603505d3aa3",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-08-16T18:25:20.000Z"
+    },
+    {
+      "_id": "9511f24ab98fb50c5edcd171",
+      "pedido_id": "98a690a24de6d573f2c11751",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0026",
+      "creadoEn": "2025-08-21T16:44:27.000Z"
+    },
+    {
+      "_id": "8b91baf7bef4958f5298a729",
+      "pedido_id": "43146c2651f7c116881189cd",
+      "metodo": "efectivo",
+      "estado": "aprobado",
+      "txId": "MP-0027",
+      "creadoEn": "2025-08-22T10:18:03.000Z"
+    },
+    {
+      "_id": "f00a1dcf658a034c4850a5b9",
+      "pedido_id": "6bb4bdbea3945afaf8b51579",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-08-31T20:28:07.000Z"
+    },
+    {
+      "_id": "255aeca7ae85c6bd4b583ace",
+      "pedido_id": "a94e6d023bcd4a4efdaf0d20",
+      "metodo": "mercado_pago",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-07T10:15:48.000Z"
+    },
+    {
+      "_id": "f40fad969dcb506737f341cc",
+      "pedido_id": "10592d952ebb4629fdaa460c",
+      "metodo": "tarjeta",
+      "estado": "rechazado",
+      "txId": "MP-0028",
+      "creadoEn": "2025-09-07T14:45:40.000Z"
+    },
+    {
+      "_id": "8ce257d45c1f8f306d140dd5",
+      "pedido_id": "36d5ce0e7384229da651a79a",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0029",
+      "creadoEn": "2025-09-09T12:55:25.000Z"
+    },
+    {
+      "_id": "8a494e534571240983552b43",
+      "pedido_id": "b22c4ec0c41b9175795419b3",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0030",
+      "creadoEn": "2025-09-09T16:58:04.000Z"
+    },
+    {
+      "_id": "95727a106299db94dba8fc72",
+      "pedido_id": "0dc652074e6b9fd5baa7f542",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-09T20:37:22.000Z"
+    },
+    {
+      "_id": "14ac7f2e452e5d57117d4598",
+      "pedido_id": "6016004cfa20c38579a83a68",
+      "metodo": "mercado_pago",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-11T13:29:02.000Z"
+    },
+    {
+      "_id": "b181479332713b6f95b2abbd",
+      "pedido_id": "4483c86ada1bbd016794bb1b",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-11T17:35:07.000Z"
+    },
+    {
+      "_id": "9517469a9d5a0329ccca7497",
+      "pedido_id": "4ce19840b08863c61694899f",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0031",
+      "creadoEn": "2025-09-16T10:07:43.000Z"
+    },
+    {
+      "_id": "e4caeebef998dd0ef08f1406",
+      "pedido_id": "76c985016f1f2473777b54c1",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0032",
+      "creadoEn": "2025-09-17T20:22:55.000Z"
+    },
+    {
+      "_id": "ab663228d564d20a2eaf22cd",
+      "pedido_id": "1ccdee4a97269a66eb07455c",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0033",
+      "creadoEn": "2025-09-17T20:34:03.000Z"
+    },
+    {
+      "_id": "e976d63607bb4e900759f1b8",
+      "pedido_id": "d9db4912142b86262abaf872",
+      "metodo": "efectivo",
+      "estado": "aprobado",
+      "txId": "MP-0034",
+      "creadoEn": "2025-09-18T10:03:47.000Z"
+    },
+    {
+      "_id": "48893aaaa899e807e955f42b",
+      "pedido_id": "d44b95ef5e53fe63b2b925a0",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-18T13:03:24.000Z"
+    },
+    {
+      "_id": "4c4a99a4b0721c4944b9eba5",
+      "pedido_id": "4c4fa66547ad618ad5a9411f",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-19T20:51:33.000Z"
+    },
+    {
+      "_id": "c3280ff9ddc66ab29d04d077",
+      "pedido_id": "06b7c5954090c4c75932338c",
+      "metodo": "mercado_pago",
+      "estado": "rechazado",
+      "txId": "MP-0035",
+      "creadoEn": "2025-09-23T20:52:50.000Z"
+    },
+    {
+      "_id": "fe3a64864c658f185d9a44c4",
+      "pedido_id": "abc1f768eb8c5e8a1ca5a0fa",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0036",
+      "creadoEn": "2025-09-24T13:06:22.000Z"
+    },
+    {
+      "_id": "7a3ac8af500168a5b40909e3",
+      "pedido_id": "2253d62aa61cc6bbe779dd1f",
+      "metodo": "transferencia",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-26T11:11:47.000Z"
+    },
+    {
+      "_id": "1f196cac2124a17fcbac4c40",
+      "pedido_id": "5f35ff4b7936d61998a8f7b7",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0037",
+      "creadoEn": "2025-09-26T17:52:02.000Z"
+    },
+    {
+      "_id": "4d21f36a186917401bc07a00",
+      "pedido_id": "e798f0b869eceb2d1a95e69b",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0038",
+      "creadoEn": "2025-09-29T17:12:05.000Z"
+    },
+    {
+      "_id": "2560bc76bc136bc18f540fa5",
+      "pedido_id": "049cddebac89cf42a2286682",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-09-30T13:53:24.000Z"
+    },
+    {
+      "_id": "c438fa461b7e7300f36ca7fc",
+      "pedido_id": "d746c3bc658b446b5825392b",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0039",
+      "creadoEn": "2025-09-30T16:29:09.000Z"
+    },
+    {
+      "_id": "55b63a8fd8b31b70e93a0aed",
+      "pedido_id": "f38a2442244c5fb797206d6d",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0040",
+      "creadoEn": "2025-10-05T22:38:38.000Z"
+    },
+    {
+      "_id": "d1d199135db61a85f30214c2",
+      "pedido_id": "8efea33d6e59710a99731a86",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0041",
+      "creadoEn": "2025-10-07T12:58:40.000Z"
+    },
+    {
+      "_id": "2392ca62e10eb94bc7224732",
+      "pedido_id": "5b917e67850c1b6c892e3000",
+      "metodo": "transferencia",
+      "estado": "aprobado",
+      "txId": "MP-0042",
+      "creadoEn": "2025-10-08T16:27:48.000Z"
+    },
+    {
+      "_id": "9b91d4683ff9df87a3012de7",
+      "pedido_id": "1798ffe2d95acfc01400c8a8",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0043",
+      "creadoEn": "2025-10-14T11:34:08.000Z"
+    },
+    {
+      "_id": "05349e710820813796be3133",
+      "pedido_id": "dd29cbe0bf993fe74713380e",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0044",
+      "creadoEn": "2025-10-15T14:26:05.000Z"
+    },
+    {
+      "_id": "3e1906392573545094176c34",
+      "pedido_id": "dc1f0e6b7665e47299a7e716",
+      "metodo": "tarjeta",
+      "estado": "aprobado",
+      "txId": "MP-0045",
+      "creadoEn": "2025-10-16T11:05:30.000Z"
+    },
+    {
+      "_id": "cfe98368d37706d363efee60",
+      "pedido_id": "a67b729c3034c9c78948f8cc",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0046",
+      "creadoEn": "2025-10-17T15:29:35.000Z"
+    },
+    {
+      "_id": "c087cd7380bf24a174bdb07c",
+      "pedido_id": "0d51358a4f067b37c20df2d5",
+      "metodo": "efectivo",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-10-18T20:34:52.000Z"
+    },
+    {
+      "_id": "2dab0a6b84cb993a95e8e506",
+      "pedido_id": "68f8f58cb6fbbdfa6ccebeb0",
+      "metodo": "mercado_pago",
+      "estado": "aprobado",
+      "txId": "MP-0047",
+      "creadoEn": "2025-10-22T15:45:22.587Z"
+    },
+    {
+      "_id": "05ab8c258abcdbcc5e860578",
+      "pedido_id": "68f8f58cb6fbbdfa6ccebeb1",
+      "metodo": "tarjeta",
+      "estado": "pendiente",
+      "txId": null,
+      "creadoEn": "2025-10-22T15:59:57.595Z"
+    }
   ]
 };
 
@@ -359,13 +2893,16 @@ function renderResumen(){
     ...DB.pedidos.map(p=>({t:`Pedido ${shortId(p._id)} · ${cliName(p.cliente_id)}`, s:`${money(p.total)} — estado: ${p.estado}`, d:p.fecha, c:p.estado==="pagado"?"#16a34a":"#d97706"})),
     ...DB.pagos.map(p=>({t:`Pago ${shortId(p._id)} · ${p.metodo}`, s:(p.txId?`txId ${p.txId}`:"sin txId")+` — ${p.estado}`, d:p.creadoEn, c:p.estado==="aprobado"?"#16a34a":"#94a3b8"})),
     ...DB.clientes.map(c=>({t:`Alta de cliente · ${c.nombre}`, s:c.email, d:c.creadoEn, c:"#4f46e5"}))
-  ].sort((a,b)=>new Date(b.d)-new Date(a.d));
+  ].sort((a,b)=>new Date(b.d)-new Date(a.d)).slice(0,12);
   $("#tl").innerHTML = ev.map(e=>`
     <li><span class="dot" style="background:${e.c}"></span>
       <div><div class="t-main">${e.t}</div><div class="t-sub">${e.s} · ${fdate(e.d)}</div></div></li>`).join("");
 
-  const max = Math.max(...DB.productos.map(p=>p.stock));
-  $("#stockBars").innerHTML = DB.productos.map(p=>`
+  const topStock = [...DB.productos].sort((a,b)=>b.stock-a.stock);
+  const shown = topStock.slice(0,12);
+  const max = shown[0].stock;
+  $("#stockHint").textContent = `top 12 de ${DB.productos.length} productos · unidades disponibles`;
+  $("#stockBars").innerHTML = shown.map(p=>`
     <div class="bar-wrap" style="margin-bottom:12px">
       <span style="width:170px;font-size:13.5px;font-weight:600">${p.nombre}</span>
       <div class="bar"><span style="width:${(p.stock/max*100).toFixed(1)}%"></span></div>
@@ -523,6 +3060,15 @@ $("#fEstPag").addEventListener("change",renderPagos);
 
 renderResumen(); renderProductos(); renderCategorias();
 renderClientes(); renderPedidos(); renderPagos(); renderEsquema();
+
+/* contadores de registros por colección */
+const setTxt = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
+setTxt("#cntProd", DB.productos.length + " registros");
+setTxt("#cntCat",  DB.categorias.length + " registros");
+setTxt("#cntCli",  DB.clientes.length  + " registros");
+setTxt("#cntPed",  DB.pedidos.length   + " registros");
+setTxt("#cntPag",  DB.pagos.length     + " registros");
+setTxt("#docsTotal", Object.values(DB).reduce((a,v)=>a+v.length, 0));
 </script>
 </body>
 </html>
