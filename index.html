@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcommerceDB — Panel de administración</title>
+<style>
+  :root{
+    --bg:#0f172a; --bg2:#1e293b; --panel:#ffffff; --soft:#f1f5f9;
+    --line:#e2e8f0; --txt:#0f172a; --muted:#64748b;
+    --primary:#4f46e5; --primary-d:#4338ca;
+    --green:#16a34a; --amber:#d97706; --red:#dc2626; --blue:#0284c7; --purple:#7c3aed;
+    --radius:14px;
+    --shadow:0 1px 3px rgba(15,23,42,.08),0 8px 24px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#eef2ff 0%,#f8fafc 40%,#ecfeff 100%);
+    color:var(--txt); min-height:100vh;
+  }
+  /* ---------- Layout ---------- */
+  .app{display:flex;min-height:100vh}
+  aside{
+    width:250px;background:linear-gradient(180deg,#111827,#1f2937);color:#e5e7eb;
+    padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 20px;border-bottom:1px solid #374151;margin-bottom:14px}
+  .brand .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee);
+    display:grid;place-items:center;font-weight:800;color:#fff;font-size:18px}
+  .brand h1{font-size:17px;font-weight:700;letter-spacing:.3px}
+  .brand small{display:block;font-size:11px;color:#9ca3af;font-weight:400}
+  nav button{
+    width:100%;display:flex;align-items:center;gap:11px;background:none;border:0;color:#cbd5e1;
+    padding:11px 12px;border-radius:10px;font-size:14.5px;cursor:pointer;text-align:left;transition:.15s;
+  }
+  nav button:hover{background:#374151;color:#fff}
+  nav button.active{background:var(--primary);color:#fff;font-weight:600;box-shadow:0 6px 16px rgba(79,70,229,.4)}
+  nav button .ic{width:20px;text-align:center;font-size:16px}
+  aside .foot{margin-top:auto;font-size:11.5px;color:#9ca3af;padding:12px 10px;border-top:1px solid #374151;line-height:1.7}
+  aside .foot code{background:#111827;padding:1px 5px;border-radius:5px;color:#67e8f9;font-size:10.5px}
+  main{flex:1;padding:28px 34px;max-width:1300px}
+  /* ---------- Header ---------- */
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  .page-head h2{font-size:26px;font-weight:800;letter-spacing:-.5px}
+  .page-head p{color:var(--muted);font-size:14px;margin-top:4px}
+  .search{position:relative}
+  .search input{
+    padding:10px 14px 10px 36px;border:1px solid var(--line);border-radius:10px;font-size:14px;
+    width:270px;background:#fff;outline:none;transition:.15s;
+  }
+  .search input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.15)}
+  .search::before{content:"🔍";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.6}
+  select.filter{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff;outline:none;cursor:pointer}
+  /* ---------- KPIs ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:26px}
+  .kpi{background:var(--panel);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+    border:1px solid var(--line);position:relative;overflow:hidden}
+  .kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;opacity:.12}
+  .kpi.i1::after{background:var(--primary)} .kpi.i2::after{background:var(--green)}
+  .kpi.i3::after{background:var(--amber)} .kpi.i4::after{background:var(--purple)} .kpi.i5::after{background:var(--blue)}
+  .kpi .lbl{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+  .kpi .val{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-1px}
+  .kpi .sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+  /* ---------- Cards / tables ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px}
+  .card-h{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .card-h h3{font-size:15.5px;font-weight:700}
+  .card-h .hint{font-size:12.5px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{
+    text-align:left;padding:12px 16px;background:var(--soft);color:#475569;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.7px;font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:13px 16px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr{transition:.12s}
+  tbody tr:hover{background:#f8fafc}
+  .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+  .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--muted)}
+  .empty{padding:36px;text-align:center;color:var(--muted);font-size:14px}
+  /* ---------- Badges ---------- */
+  .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.3px}
+  .b-green{background:#dcfce7;color:#15803d} .b-amber{background:#fef3c7;color:#b45309}
+  .b-red{background:#fee2e2;color:#b91c1c} .b-blue{background:#e0f2fe;color:#0369a1}
+  .b-gray{background:#e2e8f0;color:#475569} .b-purple{background:#ede9fe;color:#6d28d9}
+  .chip{display:inline-block;padding:3px 9px;border-radius:8px;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:600}
+  .stock-low{color:var(--red);font-weight:700} .stock-ok{color:var(--green);font-weight:600}
+  /* ---------- Grids / misc ---------- */
+  .grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:22px}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+  .cat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .cat-card .icn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;margin-bottom:12px}
+  .cat-card h4{font-size:16px;font-weight:700}
+  .cat-card .meta{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.7}
+  .bar-wrap{display:flex;align-items:center;gap:10px}
+  .bar{flex:1;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;min-width:70px}
+  .bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#6366f1,#22d3ee)}
+  .timeline{list-style:none}
+  .timeline li{padding:12px 0;border-bottom:1px dashed var(--line);display:flex;gap:12px;align-items:flex-start}
+  .timeline li:last-child{border-bottom:0}
+  .timeline .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
+  .timeline .t-main{font-size:14px;font-weight:600}
+  .timeline .t-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  /* items of order */
+  .items-table{font-size:13px;background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .items-table td{padding:8px 12px}
+  /* schema */
+  pre.schema{background:#0f172a;color:#a5b4fc;padding:18px;border-radius:12px;overflow:auto;font-size:12.5px;line-height:1.65}
+  .schema-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .schema-tabs button{border:1px solid var(--line);background:#fff;padding:7px 14px;border-radius:999px;font-size:13px;cursor:pointer;font-weight:600;color:#475569}
+  .schema-tabs button.active{background:var(--primary);border-color:var(--primary);color:#fff}
+  .section{display:none} .section.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .tag-db{font-size:11px;background:#111827;color:#67e8f9;border:1px solid #374151;padding:3px 8px;border-radius:6px}
+  /* responsive */
+  @media(max-width:960px){
+    aside{width:70px;padding:18px 8px} .brand h1,.brand small,aside .foot,nav button span.txt{display:none}
+    nav button{justify-content:center} main{padding:20px 16px} .grid2{grid-template-columns:1fr}
+    .search input{width:100%} .page-head{align-items:stretch}
+    .table-scroll{overflow-x:auto}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ============ SIDEBAR ============ -->
+  <aside>
+    <div class="brand">
+      <div class="logo">E</div>
+      <div><h1>EcommerceDB</h1><small>Panel de administración</small></div>
+    </div>
+    <nav>
+      <button class="active" data-s="resumen"><span class="ic">📊</span><span class="txt">Resumen</span></button>
+      <button data-s="productos"><span class="ic">📦</span><span class="txt">Productos</span></button>
+      <button data-s="categorias"><span class="ic">🏷️</span><span class="txt">Categorías</span></button>
+      <button data-s="clientes"><span class="ic">👥</span><span class="txt">Clientes</span></button>
+      <button data-s="pedidos"><span class="ic">🛒</span><span class="txt">Pedidos</span></button>
+      <button data-s="pagos"><span class="ic">💳</span><span class="txt">Pagos</span></button>
+      <button data-s="esquema"><span class="ic">🧩</span><span class="txt">Esquema DB</span></button>
+    </nav>
+    <div class="foot">
+      Fuente: dump <code>mongodump</code><br>
+      Colecciones: <strong>5</strong> · Docs: <strong>16</strong><br>
+      MongoDB <code>8.2.1</code>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+    <!-- ---------- RESUMEN ---------- -->
+    <section class="section active" id="resumen">
+      <div class="page-head">
+        <div><h2>Resumen general</h2><p>Vista consolidada de la base de datos de comercio electrónico</p></div>
+        <span class="tag-db">mongodb://ecommerceDB</span>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h"><h3>Productos más caros</h3><span class="hint">ordenado por precio</span></div>
+          <div class="table-scroll"><table>
+            <thead><tr><th>Producto</th><th>Categoría</th><th class="num">Precio</th><th class="num">Stock</th></tr></thead>
+            <tbody id="tbTopProd"></tbody>
+          </table></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Actividad reciente</h3><span class="hint">últimos eventos</span></div>
+          <div style="padding:6px 20px 14px"><ul class="timeline" id="tl"></ul></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>Distribución de stock por producto</h3><span class="hint">unidades disponibles</span></div>
+        <div style="padding:16px 20px" id="stockBars"></div>
+      </div>
+    </section>
+
+    <!-- ---------- PRODUCTOS ---------- -->
+    <section class="section" id="productos">
+      <div class="page-head">
+        <div><h2>Productos</h2><p>Colección <strong>productos</strong> · precios enteros (ARS)</p></div>
+        <div style="display:flex;gap:10px">
+          <select class="filter" id="fCatProd"><option value="">Todas las categorías</option></select>
+          <div class="search"><input id="qProd" placeholder="Buscar producto…"></div>
+        </div>
+      </div>
+      <div class="card"><div class="table-scroll"><table>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th class="num">Precio</th><th class="num">Stock</th><th>Creado</th></tr></thead>
+        <tbody id="tbProd"></tbody>
+      </table></div></div>
+    </section>
+
+    <!-- ---------- CATEGORIAS ---------- -->
+    <section class="section" id="categorias">
+      <div class="page-head">
+        <div><h2>Categorías</h2><p>Colección <strong>categorias</strong> · soporta jerarquía vía <code>parentId</code></p></div>
+      </div>
+      <div class="cat-grid" id="catGrid"></div>
+    </section>
+
+    <!-- ---------- CLIENTES ---------- -->
+    <section class="section" id="clientes">
+      <div class="page-head">
+        <div><h2>Clientes</h2><p>Colección <strong>clientes</strong> · email único (índice unique)</p></div>
+        <div class="search"><input id="qCli" placeholder="Buscar cliente o email…"></div>
+      </div>
+      <div class="card"><div class="table-scroll"><table>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th class="num">Pedidos</th><th class="num">Total gastado</th><th>Registrado</th></tr></thead>
+        <tbody id="tbCli"></tbody>
+      </table></div></div>
+    </section>
+
+    <!-- ---------- PEDIDOS ---------- -->
+    <section class="section" id="pedidos">
+      <div class="page-head">
+        <div><h2>Pedidos</h2><p>Colección <strong>pedidos</strong> · ítems anidados con precio unitario</p></div>
+        <div style="display:flex;gap:10px">
+          <select class="filter" id="fEstPed">
+            <option value="">Todos los estados</option>
+            <option>pendiente</option><option>pagado</option><option>cancelado</option><option>enviado</option><option>entregado</option>
+          </select>
+          <div class="search"><input id="qPed" placeholder="Buscar por cliente…"></div>
+        </div>
+      </div>
+      <div id="pedList"></div>
+    </section>
+
+    <!-- ---------- PAGOS ---------- -->
+    <section class="section" id="pagos">
+      <div class="page-head">
+        <div><h2>Pagos</h2><p>Colección <strong>pagos</strong> · relacionada a pedidos via <code>pedido_id</code></p></div>
+        <select class="filter" id="fEstPag">
+          <option value="">Todos los estados</option>
+          <option>pendiente</option><option>aprobado</option><option>rechazado</option><option>reembolsado</option>
+        </select>
+      </div>
+      <div class="card"><div class="table-scroll"><table>
+        <thead><tr><th>ID Pago</th><th>Pedido</th><th>Cliente</th><th>Método</th><th>Estado</th><th>txId</th><th class="num">Monto</th><th>Fecha</th></tr></thead>
+        <tbody id="tbPag"></tbody>
+      </table></div></div>
+    </section>
+
+    <!-- ---------- ESQUEMA ---------- -->
+    <section class="section" id="esquema">
+      <div class="page-head">
+        <div><h2>Esquema de la base</h2><p>Validadores <code>$jsonSchema</code> e índices de cada colección (desde <em>*.metadata.json</em>)</p></div>
+      </div>
+      <div class="schema-tabs" id="schTabs"></div>
+      <pre class="schema" id="schBox"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   DATOS  (extraídos de los archivos .bson del dump)
+   ========================================================= */
+const DB = {
+  categorias: [
+    {_id:"68f8f4eeb6fbbdfa6ccebea4", nombre:"Electrónica"},
+    {_id:"68f8f4eeb6fbbdfa6ccebea5", nombre:"Indumentaria"},
+    {_id:"68f8f51cb6fbbdfa6ccebea6", nombre:"Electrónica"},
+    {_id:"68f8f51cb6fbbdfa6ccebea7", nombre:"Indumentaria"}
+  ],
+  clientes: [
+    {_id:"68f8f584b6fbbdfa6ccebeae", nombre:"Franco Parra", email:"franco@example.com", creadoEn:"2025-10-22T15:17:24.194Z"},
+    {_id:"68f8f584b6fbbdfa6ccebeaf", nombre:"Sofía López",  email:"sofia@example.com",  creadoEn:"2025-10-22T15:17:24.202Z"}
+  ],
+  productos: [
+    {_id:"68f8f52bb6fbbdfa6ccebea8", nombre:"Auriculares BT",  categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:19999,  stock:50,  creadoEn:"2025-10-22T15:15:55.549Z"},
+    {_id:"68f8f52bb6fbbdfa6ccebea9", nombre:'TV 55" 4K',      categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:499999, stock:10,  creadoEn:"2025-10-22T15:15:55.559Z"},
+    {_id:"68f8f52bb6fbbdfa6ccebeaa", nombre:"Zapatillas Runner",categoria_id:"68f8f51cb6fbbdfa6ccebea7", precio:89999, stock:120, creadoEn:"2025-10-22T15:15:55.563Z"},
+    {_id:"68f8f53fb6fbbdfa6ccebeab", nombre:"Auriculares BT",  categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:19999,  stock:50,  creadoEn:"2025-10-22T15:16:15.245Z"},
+    {_id:"68f8f53fb6fbbdfa6ccebeac", nombre:'TV 55" 4K',      categoria_id:"68f8f51cb6fbbdfa6ccebea6", precio:499999, stock:10,  creadoEn:"2025-10-22T15:16:15.248Z"},
+    {_id:"68f8f53fb6fbbdfa6ccebead", nombre:"Zapatillas Runner",categoria_id:"68f8f51cb6fbbdfa6ccebea7", precio:89999, stock:120, creadoEn:"2025-10-22T15:16:15.251Z"}
+  ],
+  pedidos: [
+    {_id:"68f8f58cb6fbbdfa6ccebeb0", cliente_id:"68f8f584b6fbbdfa6ccebeae", fecha:"2025-10-22T15:17:32.587Z",
+     items:[{producto_id:"68f8f53fb6fbbdfa6ccebeab",cantidad:1,precioUnit:19999},
+            {producto_id:"68f8f53fb6fbbdfa6ccebead",cantidad:2,precioUnit:89999}],
+     total:199997, estado:"pagado"},
+    {_id:"68f8f58cb6fbbdfa6ccebeb1", cliente_id:"68f8f584b6fbbdfa6ccebeaf", fecha:"2025-10-22T15:17:32.595Z",
+     items:[{producto_id:"68f8f53fb6fbbdfa6ccebeac",cantidad:1,precioUnit:499999}],
+     total:499999, estado:"pendiente"}
+  ],
+  pagos: [
+    {_id:"68f8f593b6fbbdfa6ccebeb2", pedido_id:"68f8f58cb6fbbdfa6ccebeb0", metodo:"tarjeta", estado:"aprobado",  txId:"MP-001", creadoEn:"2025-10-22T15:17:39.414Z"},
+    {_id:"68f8f593b6fbbdfa6ccebeb3", pedido_id:"68f8f58cb6fbbdfa6ccebeb1", metodo:"tarjeta", estado:"pendiente", txId:null,     creadoEn:"2025-10-22T15:17:39.424Z"}
+  ]
+};
+
+/* Esquemas (metadata.json) */
+const SCHEMAS = {
+  categorias: {"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["nombre"],"properties":{"nombre":{"bsonType":"string"},"descripcion":{"bsonType":"string"},"parentId":{"bsonType":["objectId","null"]}}}},"validationLevel":"strict","validationAction":"error"},"indexes":[{"key":{"_id":1},"name":"_id_"}]},
+  clientes: {"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["nombre","email","creadoEn"],"properties":{"nombre":{"bsonType":"string"},"email":{"bsonType":"string"},"telefono":{"bsonType":"string"},"direcciones":{"bsonType":"array","items":{"bsonType":"object","required":["calle","ciudad"],"properties":{"calle":{"bsonType":"string"},"ciudad":{"bsonType":"string"},"provincia":{"bsonType":"string"},"codigoPostal":{"bsonType":"string"}}}},"creadoEn":{"bsonType":"date"}}}},"validationLevel":"strict","validationAction":"error"},"indexes":[{"key":{"_id":1},"name":"_id_"},{"key":{"email":1},"name":"email_1","unique":true}]},
+  pagos: {"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["pedido_id","metodo","estado","creadoEn"],"properties":{"pedido_id":{"bsonType":"objectId"},"metodo":{"bsonType":"string"},"estado":{"enum":["pendiente","aprobado","rechazado","reembolsado"]},"txId":{"bsonType":["string","null"]},"creadoEn":{"bsonType":"date"}}}},"validationLevel":"strict","validationAction":"error"},"indexes":[{"key":{"_id":1},"name":"_id_"},{"key":{"pedido_id":1,"estado":1},"name":"pedido_id_1_estado_1"}]},
+  pedidos: {"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["cliente_id","fecha","items","total","estado"],"properties":{"cliente_id":{"bsonType":"objectId"},"fecha":{"bsonType":"date"},"items":{"bsonType":"array","minItems":1,"items":{"bsonType":"object","required":["producto_id","cantidad","precioUnit"],"properties":{"producto_id":{"bsonType":"objectId"},"cantidad":{"bsonType":"int","minimum":1},"precioUnit":{"bsonType":"int","minimum":0}}}},"total":{"bsonType":"int","minimum":0},"estado":{"enum":["pendiente","pagado","cancelado","enviado","entregado"]}}}},"validationLevel":"strict","validationAction":"error"},"indexes":[{"key":{"_id":1},"name":"_id_"},{"key":{"fecha":-1},"name":"fecha_-1"},{"key":{"items.producto_id":1},"name":"items.producto_id_1"}]},
+  productos: {"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["nombre","precio","stock","categoria_id","creadoEn"],"properties":{"nombre":{"bsonType":"string"},"precio":{"bsonType":"int","minimum":0},"stock":{"bsonType":"int","minimum":0},"categoria_id":{"bsonType":"objectId"},"atributos":{"bsonType":"object"},"creadoEn":{"bsonType":"date"}}}},"validationLevel":"strict","validationAction":"error"},"indexes":[{"key":{"_id":1},"name":"_id_"},{"key":{"_fts":"text","_ftsx":1},"name":"nombre_text","weights":{"nombre":1},"default_language":"english","textIndexVersion":3}]}
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const money = n => "$ " + Number(n).toLocaleString("es-AR");
+const shortId = id => id ? id.slice(-6).toUpperCase() : "—";
+const fdate = d => new Date(d).toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const fday  = d => new Date(d).toLocaleDateString("es-AR",{day:"2-digit",month:"short",year:"numeric"});
+
+const catById  = id => DB.categorias.find(c=>c._id===id);
+const cliById  = id => DB.clientes.find(c=>c._id===id);
+const prodById = id => DB.productos.find(p=>p._id===id);
+const catName  = id => catById(id)?.nombre || "—";
+const cliName  = id => cliById(id)?.nombre || "—";
+
+const badgeEstado = e => ({
+  pendiente:"b-amber", pagado:"b-green", cancelado:"b-red", enviado:"b-blue", entregado:"b-purple",
+  aprobado:"b-green", rechazado:"b-red", reembolsado:"b-gray"
+}[e] || "b-gray");
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+$$("nav button").forEach(b=>b.addEventListener("click",()=>{
+  $$("nav button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  $$(".section").forEach(s=>s.classList.remove("active"));
+  $("#"+b.dataset.s).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}));
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+function renderResumen(){
+  const ingresos = DB.pedidos.filter(p=>p.estado!=="cancelado").reduce((a,p)=>a+p.total,0);
+  const aprobados = DB.pagos.filter(p=>p.estado==="aprobado").length;
+  const kpis = [
+    {c:"i1",l:"Clientes",     v:DB.clientes.length,  s:"registrados en la colección"},
+    {c:"i2",l:"Productos",    v:DB.productos.length, s:`${DB.categorias.length} categorías`},
+    {c:"i3",l:"Pedidos",      v:DB.pedidos.length,   s:`${DB.pedidos.filter(p=>p.estado==="pagado").length} pagados`},
+    {c:"i4",l:"Ingresos",     v:money(ingresos),     s:"suma de pedidos no cancelados"},
+    {c:"i5",l:"Pagos aprobados",v:`${aprobados}/${DB.pagos.length}`, s:"transacciones confirmadas"}
+  ];
+  $("#kpis").innerHTML = kpis.map(k=>`
+    <div class="kpi ${k.c}"><div class="lbl">${k.l}</div><div class="val">${k.v}</div><div class="sub">${k.s}</div></div>`).join("");
+
+  $("#tbTopProd").innerHTML = [...DB.productos].sort((a,b)=>b.precio-a.precio).slice(0,5).map(p=>`
+    <tr><td><strong>${p.nombre}</strong><div class="mono">${shortId(p._id)}</div></td>
+    <td><span class="chip">${catName(p.categoria_id)}</span></td>
+    <td class="num">${money(p.precio)}</td>
+    <td class="num"><span class="${p.stock<=10?'stock-low':'stock-ok'}">${p.stock}</span></td></tr>`).join("");
+
+  // timeline: unir eventos de pedidos, pagos y clientes
+  const ev = [
+    ...DB.pedidos.map(p=>({t:`Pedido ${shortId(p._id)} · ${cliName(p.cliente_id)}`, s:`${money(p.total)} — estado: ${p.estado}`, d:p.fecha, c:p.estado==="pagado"?"#16a34a":"#d97706"})),
+    ...DB.pagos.map(p=>({t:`Pago ${shortId(p._id)} · ${p.metodo}`, s:(p.txId?`txId ${p.txId}`:"sin txId")+` — ${p.estado}`, d:p.creadoEn, c:p.estado==="aprobado"?"#16a34a":"#94a3b8"})),
+    ...DB.clientes.map(c=>({t:`Alta de cliente · ${c.nombre}`, s:c.email, d:c.creadoEn, c:"#4f46e5"}))
+  ].sort((a,b)=>new Date(b.d)-new Date(a.d));
+  $("#tl").innerHTML = ev.map(e=>`
+    <li><span class="dot" style="background:${e.c}"></span>
+      <div><div class="t-main">${e.t}</div><div class="t-sub">${e.s} · ${fdate(e.d)}</div></div></li>`).join("");
+
+  const max = Math.max(...DB.productos.map(p=>p.stock));
+  $("#stockBars").innerHTML = DB.productos.map(p=>`
+    <div class="bar-wrap" style="margin-bottom:12px">
+      <span style="width:170px;font-size:13.5px;font-weight:600">${p.nombre}</span>
+      <div class="bar"><span style="width:${(p.stock/max*100).toFixed(1)}%"></span></div>
+      <span style="width:50px;text-align:right;font-size:13px;font-weight:700">${p.stock}</span>
+    </div>`).join("");
+}
+
+/* =========================================================
+   PRODUCTOS
+   ========================================================= */
+function renderProductos(){
+  const q = ($("#qProd").value||"").toLowerCase();
+  const cat = $("#fCatProd").value;
+  const rows = DB.productos.filter(p =>
+    (!q || p.nombre.toLowerCase().includes(q)) &&
+    (!cat || p.categoria_id===cat));
+  $("#tbProd").innerHTML = rows.length ? rows.map(p=>`
+    <tr>
+      <td class="mono">${shortId(p._id)}</td>
+      <td><strong>${p.nombre}</strong></td>
+      <td><span class="chip">${catName(p.categoria_id)}</span></td>
+      <td class="num">${money(p.precio)}</td>
+      <td class="num"><span class="${p.stock<=10?'stock-low':'stock-ok'}">${p.stock}</span></td>
+      <td style="color:var(--muted);font-size:13px">${fday(p.creadoEn)}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">Sin resultados para la búsqueda.</td></tr>`;
+}
+
+/* =========================================================
+   CATEGORIAS
+   ========================================================= */
+function renderCategorias(){
+  const icons = {Electrónica:"💻", Indumentaria:"👕"};
+  const colors = {Electrónica:"#eef2ff,#c7d2fe", Indumentaria:"#fdf4f3,#fecaca"};
+  $("#catGrid").innerHTML = DB.categorias.map(c=>{
+    const prods = DB.productos.filter(p=>p.categoria_id===c._id);
+    const stock = prods.reduce((a,p)=>a+p.stock,0);
+    const valor = prods.reduce((a,p)=>a+p.precio*p.stock,0);
+    const [bg,fg] = (colors[c.nombre]||"#f1f5f9,#94a3b8").split(",");
+    return `<div class="cat-card">
+      <div class="icn" style="background:${bg};color:${fg}">${icons[c.nombre]||"🏷️"}</div>
+      <h4>${c.nombre}</h4>
+      <div class="meta">
+        ID: <span class="mono">${shortId(c._id)}</span><br>
+        Productos: <strong>${prods.length}</strong> · Stock: <strong>${stock}</strong><br>
+        Valor inventario: <strong>${money(valor)}</strong>
+      </div></div>`;
+  }).join("");
+}
+
+/* =========================================================
+   CLIENTES
+   ========================================================= */
+function renderClientes(){
+  const q = ($("#qCli").value||"").toLowerCase();
+  const rows = DB.clientes.filter(c => !q || c.nombre.toLowerCase().includes(q) || c.email.toLowerCase().includes(q));
+  $("#tbCli").innerHTML = rows.length ? rows.map(c=>{
+    const ps = DB.pedidos.filter(p=>p.cliente_id===c._id);
+    const total = ps.reduce((a,p)=>a+p.total,0);
+    return `<tr>
+      <td class="mono">${shortId(c._id)}</td>
+      <td><strong>${c.nombre}</strong></td>
+      <td><a href="mailto:${c.email}" style="color:var(--primary);text-decoration:none">${c.email}</a></td>
+      <td class="num">${ps.length}</td>
+      <td class="num">${money(total)}</td>
+      <td style="color:var(--muted);font-size:13px">${fday(c.creadoEn)}</td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="6" class="empty">Sin resultados.</td></tr>`;
+}
+
+/* =========================================================
+   PEDIDOS
+   ========================================================= */
+function renderPedidos(){
+  const est = $("#fEstPed").value;
+  const q = ($("#qPed").value||"").toLowerCase();
+  const rows = DB.pedidos.filter(p =>
+    (!est || p.estado===est) &&
+    (!q || cliName(p.cliente_id).toLowerCase().includes(q)));
+
+  $("#pedList").innerHTML = rows.length ? rows.map(p=>{
+    const pago = DB.pagos.find(g=>g.pedido_id===p._id);
+    const items = p.items.map(it=>{
+      const pr = prodById(it.producto_id);
+      return `<tr>
+        <td>${pr?.nombre||"?"} <span class="mono">${shortId(it.producto_id)}</span></td>
+        <td class="num">${it.cantidad}</td>
+        <td class="num">${money(it.precioUnit)}</td>
+        <td class="num">${money(it.cantidad*it.precioUnit)}</td></tr>`;
+    }).join("");
+    return `<div class="card">
+      <div class="card-h">
+        <div>
+          <h3>Pedido <span class="mono" style="font-size:13px">${shortId(p._id)}</span></h3>
+          <span class="hint">${cliName(p.cliente_id)} · ${fdate(p.fecha)}</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          ${pago?`<span class="badge ${badgeEstado(pago.estado)}">pago: ${pago.estado}</span>`:""}
+          <span class="badge ${badgeEstado(p.estado)}">${p.estado}</span>
+          <strong style="font-size:16px">${money(p.total)}</strong>
+        </div>
+      </div>
+      <div class="table-scroll" style="padding:14px 20px 18px">
+        <table class="items-table">
+          <thead><tr><th>Producto</th><th class="num">Cant.</th><th class="num">P. Unitario</th><th class="num">Subtotal</th></tr></thead>
+          <tbody>${items}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join("") : `<div class="card"><div class="empty">No hay pedidos con esos filtros.</div></div>`;
+}
+
+/* =========================================================
+   PAGOS
+   ========================================================= */
+function renderPagos(){
+  const est = $("#fEstPag").value;
+  const rows = DB.pagos.filter(p => !est || p.estado===est);
+  $("#tbPag").innerHTML = rows.length ? rows.map(g=>{
+    const ped = DB.pedidos.find(p=>p._id===g.pedido_id);
+    return `<tr>
+      <td class="mono">${shortId(g._id)}</td>
+      <td><strong>${shortId(g.pedido_id)}</strong></td>
+      <td>${cliName(ped?.cliente_id)}</td>
+      <td><span class="chip">${g.metodo}</span></td>
+      <td><span class="badge ${badgeEstado(g.estado)}">${g.estado}</span></td>
+      <td class="mono">${g.txId || "null"}</td>
+      <td class="num">${ped?money(ped.total):"—"}</td>
+      <td style="color:var(--muted);font-size:13px">${fdate(g.creadoEn)}</td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="8" class="empty">Sin resultados.</td></tr>`;
+}
+
+/* =========================================================
+   ESQUEMA
+   ========================================================= */
+function renderEsquema(sel="productos"){
+  $("#schTabs").innerHTML = Object.keys(SCHEMAS).map(k=>
+    `<button class="${k===sel?'active':''}" data-k="${k}">${k}</button>`).join("");
+  $("#schBox").textContent = JSON.stringify(SCHEMAS[sel], null, 2);
+  $$("#schTabs button").forEach(b=>b.addEventListener("click",()=>renderEsquema(b.dataset.k)));
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+DB.categorias.forEach(c=>{
+  $("#fCatProd").insertAdjacentHTML("beforeend",`<option value="${c._id}">${c.nombre} (${shortId(c._id)})</option>`);
+});
+$("#qProd").addEventListener("input",renderProductos);
+$("#fCatProd").addEventListener("change",renderProductos);
+$("#qCli").addEventListener("input",renderClientes);
+$("#fEstPed").addEventListener("change",renderPedidos);
+$("#qPed").addEventListener("input",renderPedidos);
+$("#fEstPag").addEventListener("change",renderPagos);
+
+renderResumen(); renderProductos(); renderCategorias();
+renderClientes(); renderPedidos(); renderPagos(); renderEsquema();
+</script>
+</body>
+</html>
