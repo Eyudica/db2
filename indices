@@ -1,0 +1,26 @@
+db.productos.createIndex({ nombre: "text" });
+db.productos.createIndex({ categoria_id: 1 });
+db.productos.createIndex({ precio: 1 });
+db.productos.createIndex({ stock: 1 });
+db.clientes.createIndex({ email: 1 }, { unique: true });
+db.clientes.createIndex({ nombre: 1 });
+db.pedidos.createIndex({ fecha: -1 });
+db.pedidos.createIndex({ cliente_id: 1 });
+db.pedidos.createIndex({ "items.producto_id": 1 });
+db.pedidos.createIndex({ estado: 1 });
+db.pagos.createIndex({ pedido_id: 1, estado: 1 });
+db.pagos.createIndex({ creadoEn: -1 });
+db.reseñas.createIndex({ producto_id: 1, calificacion: -1 });
+db.reseñas.createIndex({ cliente_id: 1, creadoEn: -1 });
+db.reseñas.createIndex({ pedido_id: 1 });
+db.reseñas.createIndex({ verificada: 1, calificacion: -1 });
+db.favoritos.createIndex({ cliente_id: 1 }, { unique: true });
+db.favoritos.createIndex({ "productos.producto_id": 1 });
+db.favoritos.createIndex({ "productos.agregadoEn": -1 });
+db.envios.createIndex({ pedido_id: 1 }, { unique: true });
+db.envios.createIndex({ direccion_id: 1 });
+db.envios.createIndex({ estado: 1, fechaEstimada: 1 });
+db.envios.createIndex({ codigoSeguimiento: 1 });
+db.envios.createIndex({ creadoEn: -1 });
+db.direcciones.createIndex({ provincia: 1 })
+db.direcciones.createIndex({ codigoPostal: 1 })

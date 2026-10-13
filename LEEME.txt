@@ -1,0 +1,30 @@
+Datos sintéticos para la base ecommerce
+========================================
+
+Se incluyen 2.000 documentos adicionales por colección (18.000 en total), en
+formato NDJSON / Extended JSON. Cada línea es un documento independiente.
+Los _id y referencias usan ObjectId; las fechas usan Extended JSON.
+
+Importación local (MongoDB en localhost:27017)
+-----------------------------------------------
+Ejecutar desde esta carpeta, en este orden:
+
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="categorias" --file="categorias.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="productos" --file="productos.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="clientes" --file="clientes.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="direcciones" --file="direcciones.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="pedidos" --file="pedidos.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="pagos" --file="pagos.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="envios" --file="envios.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="favoritos" --file="favoritos.json" --jsonFormat=relaxed
+mongoimport --uri="mongodb://localhost:27017/ecommerce" --collection="reseñas" --file="reseñas.json" --jsonFormat=relaxed
+
+Si tu servidor requiere usuario, contraseña o usa otra dirección, cambia la URI.
+Los documentos son nuevos y tienen referencias entre sí. No dependen de los
+ObjectId aleatorios de la carga inicial. Los índices unique existentes no
+deberían colisionar (emails, clientes favoritos y pedidos de envío son nuevos).
+La importación agrega documentos; no borra los existentes. Evita importar dos
+veces estos mismos archivos, porque los _id se repetirían.
+
+generar_datos.py permite volver a generar los archivos; N controla la cantidad
+por colección. Al regenerarlos cambiarán los ObjectId.
